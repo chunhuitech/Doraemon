@@ -38,3 +38,16 @@ else:unix: LIBS += -L$$OUT_PWD/../QControlSo/ -lQControlSo
 
 INCLUDEPATH += $$PWD/../QControlSo
 DEPENDPATH += $$PWD/../QControlSo
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../QLoggingLib/release/ -lQLoggingLib
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../QLoggingLib/debug/ -lQLoggingLib
+else:unix: LIBS += -L$$OUT_PWD/../QLoggingLib/ -lQLoggingLib
+
+INCLUDEPATH += $$PWD/../QLoggingLib
+DEPENDPATH += $$PWD/../QLoggingLib
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QLoggingLib/release/libQLoggingLib.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QLoggingLib/debug/libQLoggingLib.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QLoggingLib/release/QLoggingLib.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../QLoggingLib/debug/QLoggingLib.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../QLoggingLib/libQLoggingLib.a

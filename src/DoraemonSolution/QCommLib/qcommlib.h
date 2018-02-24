@@ -11,10 +11,11 @@ typedef unsigned short uint16_t;
 typedef unsigned char uint8_t;
 typedef unsigned long long uint64_t;
 
-struct stTest
+enum LogModelValue
 {
-    int itemType;
-    uint64_t id;
+    LMV_ROOT = 0,
+    LMV_NET = 32,
+    LMV_DB = 64
 };
 
 class QCommLib

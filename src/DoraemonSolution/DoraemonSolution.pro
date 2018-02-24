@@ -3,4 +3,5 @@ TEMPLATE = subdirs
 SUBDIRS += \
     Doraemon \
     QCommLib \
-    QControlSo
+    QControlSo \
+    QLoggingLib

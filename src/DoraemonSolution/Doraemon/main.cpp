@@ -2,15 +2,16 @@
 #include <QApplication>
 #include "qcommlib.h"
 #include "qcontrolso.h"
+#include "qlogginglib.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    stTest stTest;
-    stTest.itemType = 233;
-    QControlSo controlSo;
-    qDebug("test stTest: %d", stTest.itemType);
+    QLoggingLib::instance()->initLogConfig(a.applicationDirPath());
+    QLoggingLib::instance()->info("start up...");
+    QLoggingLib::instance()->error("db test", LMV_DB);
+//    qDebug("test stTest: %d", stTest.itemType);
     return a.exec();
 }

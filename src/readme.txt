@@ -1,3 +1,6 @@
+后缀为.so（shared object）的文件为Linux上的动态库文件，Linux上的静态库文件为.a(akynesis)
+
+
 
 
 model/view
@@ -29,7 +32,7 @@ QCommLib (接口，数据结构定义)
 
 
 QNetLib (网络调用 线程实现)
-QControlLib (线程数据处理完成信号通知中转 事件通知控制中心)
+QControlSo (线程数据处理完成信号通知中转 事件通知控制中心)
 QMemLib （内存结构定义）
 QDbLib  （数据库操作）
 QLog
