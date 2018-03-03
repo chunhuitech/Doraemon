@@ -10,10 +10,19 @@ TARGET = QCommLib
 TEMPLATE = lib
 CONFIG += staticlib
 
-SOURCES += qcommlib.cpp
+SOURCES += qcommlib.cpp \
+    ModelData/itreemodeldata.cpp \
+    ModelData/treemodeldataitemclassification.cpp
 
-HEADERS += qcommlib.h
+HEADERS += qcommlib.h \
+    ModelData/itreemodeldata.h \
+    ModelData/itreemodeldataitem.h \
+    ModelData/treemodeldataitemclassification.h
+
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+DISTFILES += \
+    readme_tech.txt

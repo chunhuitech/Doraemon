@@ -4,4 +4,5 @@ SUBDIRS += \
     Doraemon \
     QCommLib \
     QControlSo \
-    QLoggingLib
+    QLoggingLib \
+    QDatabaseSo

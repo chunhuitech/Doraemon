@@ -3,6 +3,8 @@
 #include "qcommlib.h"
 #include "qcontrolso.h"
 #include "qlogginglib.h"
+#include "qdatabaseso.h"
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +13,11 @@ int main(int argc, char *argv[])
     w.show();
     QLoggingLib::instance()->initLogConfig(a.applicationDirPath());
     QLoggingLib::instance()->info("start up...");
-    QLoggingLib::instance()->error("db test", LMV_DB);
-//    qDebug("test stTest: %d", stTest.itemType);
+    if( !QDatabaseSo::instance()->initDB()){
+        return 0;
+    }
+    int row =1;
+    qDebug("test: %d", QDatabaseSo::instance()->getClassificationChildRowId(2,row-1));
+    qDebug() << QDatabaseSo::instance()->getClassificationRecord(2).cnName;
     return a.exec();
 }
