@@ -79,6 +79,27 @@ bool QSqliteUtils::exec(const QString &strexec)
     return bSuccess;
 }
 
+int QSqliteUtils::insert(const QString &qsSql)
+{
+    QMutexLocker locker(&m_dbMutex);
+    int rowId = NOT_FIND_RECORD_ID;
+    QSqlQuery sqlQuery(m_db);
+
+    if (sqlQuery.exec(qsSql))
+    {
+        if (m_db.driver()->hasFeature(QSqlDriver::LastInsertId)) {
+            rowId = sqlQuery.lastInsertId().toUInt();
+        }
+    }
+    else
+    {
+        QSqlError err = m_db.lastError();
+        QString info = QString("CSqliteUtils::insert error type:%1 error info:%2 sql:%3 ").arg(getErrorInfo(err.type())).arg(err.text()).arg(qsSql);
+        QLoggingLib::instance()->error(info, LMV_DB);
+    }
+    return rowId;
+}
+
 int QSqliteUtils::getCount(const QString &strexec)
 {
     QMutexLocker locker(&m_dbMutex);

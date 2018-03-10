@@ -29,6 +29,7 @@ public:
 
     bool initDB();
     bool initTables();
+    bool initData();
 //    void removeDataBase();
 private:
     QDatabaseSo();

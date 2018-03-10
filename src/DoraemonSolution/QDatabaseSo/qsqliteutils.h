@@ -17,6 +17,7 @@ public:
     bool open(const QString& dbName);
     bool dbExists(const QString& tableName);
     bool exec(const QString& strexec);
+    int insert(const QString& qsSql);
     int getCount(const QString& strexec);
     bool transaction();
     bool commit();

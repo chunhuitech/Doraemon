@@ -58,7 +58,8 @@ bool QDatabaseSo::initDB()
     {
         return true;
     }
-   return initTables();
+   initTables();
+   return initData();
 }
 
 
@@ -78,6 +79,17 @@ bool QDatabaseSo::initTables()
        return bSuccess;
    }
    //同步配置信息表(上次同步时间等)
+   bSuccess = m_sqlite.exec("CREATE TABLE doraemon_config(id integer PRIMARY KEY, keyName string, keyValue string)");
+   if (!bSuccess)
+   {
+       QLoggingLib::instance()->error("QDatabaseSo::initTables create table doraemon_config fail.", LMV_DB);
+       return bSuccess;
+   }
    return bSuccess;
+}
+
+bool QDatabaseSo::initData()
+{
+    return m_sqlite.insert(QString("insert into doraemon_config(id, keyName, keyValue) values('%1', '%2', '%3')").arg(1).arg(TABLE_CONFIG_CLASS_FLAG).arg(0));
 }
 
