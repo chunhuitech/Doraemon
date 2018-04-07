@@ -4,6 +4,10 @@
 #include "qdatabaseso.h"
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QSystemTrayIcon>
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#endif
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,42 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowState(Qt::WindowMaximized);
     m_bFullScreen = false;
     m_bQueryClass = false;
-    ui->mainToolBar->hide();
-    ui->uiLeftRightSplitter->setStretchFactor(0,3);
-    ui->uiLeftRightSplitter->setStretchFactor(1,7);
-    ui->uiLeftTBSplitter->setStretchFactor(0,1);
-    ui->uiLeftTBSplitter->setStretchFactor(1,9);
-    ui->uiRightTBSplitter->setStretchFactor(0,7);
-    ui->uiRightTBSplitter->setStretchFactor(1,3);
-//    ui->uiLeftStackedWidget->setMargin(1);
-//    ui->uiLeftStackedWidget->setSpacing(1);
-//    ui->uiLeftStackedWidget->setContentsMargins(0,0,0,0);
-    ui->flashAxWidget->setControl(QString::fromUtf8("{d27cdb6e-ae6d-11cf-96b8-444553540000}"));
-    QString swfFile = "http://www.firemail.wang:8088/chunhui_resource/preschool/letters/b.swf";
-    ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
-
-    m_pClassTreeModel = new ClassificationTreeModel();
-    ui->uiClassTreeView->setModel(m_pClassTreeModel);
-    ui->uiClassTreeView->setHeaderHidden(true);
-    ui->uiLeftStackedWidget->setCurrentIndex(0);
-    m_pClassListModel = new ClassificationListModel();
-    ui->uiClassListView->setModel(m_pClassListModel);
-
-    QObject::connect(&QControlSo::instance(), SIGNAL(signSaveClassInfoFinished2UI(int)),
-            this, SLOT(OnSignSaveClassInfoFinished2UI(int)), Qt::QueuedConnection);
-    QObject::connect(&QControlSo::instance(), SIGNAL(signSaveRecordInfoFinished2UI(int)),
-            this, SLOT(OnSignSaveRecordInfoFinished2UI(int)), Qt::QueuedConnection);
-
-
-    m_pRecordTreeModel = new RecordTreeModel();
-    m_rq.classId = 5;
-    m_pRecordTreeModel->setQuery(m_rq);
-    ui->uiRecordTreeView->setModel(m_pRecordTreeModel);
-    ui->uiRecordTreeView->setColumnWidth(0,400);
-    //隐藏根节点项前的图标（展开折叠图标）
-    ui->uiRecordTreeView->setRootIsDecorated(false);
-
-    setQueryResultInfo();
+    widgetHideShow();
+    modelViewHandel();
+    trayHandle();
 }
 
 MainWindow::~MainWindow()
@@ -58,8 +29,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    QControlSo::instance().exitHandler();
-    event->accept();
+//    QControlSo::instance().exitHandler();
+//    event->accept();
+    this->hide();
+    event->ignore();
 }
 
 
@@ -187,6 +160,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     }
 }
 
+void MainWindow::changeEvent(QEvent * event)
+{
+    if ((event->type() == QEvent::WindowStateChange) && isMinimized())
+    {
+        //最小化还是原来的方式，不进行隐藏处理了。
+//       this->hide();
+//       event->ignore();
+    }
+}
+
 void MainWindow::setQueryResultInfo()
 {
     ui->uiLabelQueryResult->setText(QString::number(m_pRecordTreeModel->rowCount()));
@@ -223,4 +206,129 @@ void MainWindow::on_uiClassListView_clicked(const QModelIndex &index)
     m_pRecordTreeModel->setQuery(m_rq);
     ui->uiRecordTreeView->reset();
     setQueryResultInfo();
+}
+
+void MainWindow::on_activeTray(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason)
+   {
+   case QSystemTrayIcon::Context:
+       showMenu();
+       break;
+   case QSystemTrayIcon::DoubleClick:
+       showWindow();
+       break;
+   case QSystemTrayIcon::Trigger:
+       showMessage();
+       break;
+    default:
+        showWindow();
+        break;
+    }
+}
+
+void MainWindow::showMessage()
+{
+    m_systemTray->showMessage("多啦A梦",
+           "欢迎使用!",
+            QSystemTrayIcon::Information,//消息窗口图标
+                              5000);//消息窗口显示时长
+}
+
+void MainWindow::showWindow()
+{
+
+    if (this->isMinimized())
+    {
+//        this->showNormal();
+        this->showMaximized();
+    }
+#ifdef Q_OS_WIN32
+//    SetWindowPos((HWND)winId(),HWND_TOPMOST,pos().x(),pos().y(),width(),height(),SWP_SHOWWINDOW);
+    //设置窗口置顶
+    SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+    SetWindowPos(HWND(this->winId()), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
+
+#else
+    Qt::WindowFlags flags = windowFlags();
+    flags |= Qt::WindowStaysOnTopHint;
+    setWindowFlags(flags);
+#endif
+
+    this->show();
+    this->activateWindow();
+}
+
+void MainWindow::showMenu()
+{
+    m_menu->show();
+}
+
+void MainWindow::exitWindow()
+{
+    QControlSo::instance().exitHandler();
+    QApplication::exit();
+}
+
+void MainWindow::widgetHideShow()
+{
+    ui->mainToolBar->hide();
+    ui->uiLeftRightSplitter->setStretchFactor(0,3);
+    ui->uiLeftRightSplitter->setStretchFactor(1,7);
+    ui->uiLeftTBSplitter->setStretchFactor(0,1);
+    ui->uiLeftTBSplitter->setStretchFactor(1,9);
+    ui->uiRightTBSplitter->setStretchFactor(0,7);
+    ui->uiRightTBSplitter->setStretchFactor(1,3);
+//    ui->uiLeftStackedWidget->setMargin(1);
+//    ui->uiLeftStackedWidget->setSpacing(1);
+//    ui->uiLeftStackedWidget->setContentsMargins(0,0,0,0);
+    ui->flashAxWidget->setControl(QString::fromUtf8("{d27cdb6e-ae6d-11cf-96b8-444553540000}"));
+    QString swfFile = "http://www.firemail.wang:8088/chunhui_resource/preschool/letters/a.swf";
+    ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
+}
+
+void MainWindow::modelViewHandel()
+{
+    m_pClassTreeModel = new ClassificationTreeModel();
+    ui->uiClassTreeView->setModel(m_pClassTreeModel);
+    ui->uiClassTreeView->setHeaderHidden(true);
+    ui->uiLeftStackedWidget->setCurrentIndex(0);
+    m_pClassListModel = new ClassificationListModel();
+    ui->uiClassListView->setModel(m_pClassListModel);
+
+    QObject::connect(&QControlSo::instance(), SIGNAL(signSaveClassInfoFinished2UI(int)),
+            this, SLOT(OnSignSaveClassInfoFinished2UI(int)), Qt::QueuedConnection);
+    QObject::connect(&QControlSo::instance(), SIGNAL(signSaveRecordInfoFinished2UI(int)),
+            this, SLOT(OnSignSaveRecordInfoFinished2UI(int)), Qt::QueuedConnection);
+
+
+    m_pRecordTreeModel = new RecordTreeModel();
+    m_rq.classId = 5;
+    m_pRecordTreeModel->setQuery(m_rq);
+    ui->uiRecordTreeView->setModel(m_pRecordTreeModel);
+    ui->uiRecordTreeView->setColumnWidth(0,400);
+    //隐藏根节点项前的图标（展开折叠图标）
+    ui->uiRecordTreeView->setRootIsDecorated(false);
+
+    setQueryResultInfo();
+}
+
+void MainWindow::trayHandle()
+{
+    m_systemTray = new QSystemTrayIcon(this);
+    m_systemTray->setIcon(QIcon(":/doraemon/res/Doraemon.png"));
+    m_systemTray->setToolTip(tr("哆啦A梦"));
+    m_systemTray->show();
+    connect(m_systemTray, &QSystemTrayIcon::activated, this, &MainWindow::on_activeTray);//点击托盘，执行相应的动作
+    m_menu = new QMenu(this);
+    m_actionMain = new QAction(m_menu);
+    m_actionMain->setText(tr("打开主窗口"));
+    m_menu->addAction(m_actionMain);
+    connect(m_actionMain, &QAction::triggered, this, &MainWindow::showWindow);
+    m_actionExit = new QAction(m_menu);
+    m_actionExit->setText(tr("退出"));
+    m_menu->addAction(m_actionExit);
+    connect(m_actionExit, &QAction::triggered, this, &MainWindow::exitWindow);
+    m_systemTray->setContextMenu(m_menu);
+    connect(m_systemTray, &QSystemTrayIcon::messageClicked, this, &MainWindow::showWindow);//点击消息框，显示主窗
 }

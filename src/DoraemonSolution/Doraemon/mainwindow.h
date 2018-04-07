@@ -8,7 +8,9 @@
 #include "Model/classificationtreemodel.h"
 #include "Model/classificationlistmodel.h"
 #include "Model/recordtreemodel.h"
-
+#include <QSystemTrayIcon>
+#include <QMenu>
+#include <QAction>
 namespace Ui {
 class MainWindow;
 }
@@ -21,15 +23,20 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private:
-//    ClassificatonAPI classAPI;
-//    QControlSo cc;
-
 protected:
     void closeEvent(QCloseEvent *event);
     void keyPressEvent(QKeyEvent *event);
-
+    void changeEvent(QEvent *);
+protected:
     void setQueryResultInfo();
+    void showMessage();
+    void showWindow();
+    void showMenu();
+    void exitWindow();
+    void widgetHideShow();
+    void modelViewHandel();
+    void trayHandle();
+
 private slots:
 
     void on_MainWindow_destroyed();
@@ -51,6 +58,8 @@ private slots:
 
     void on_uiClassListView_clicked(const QModelIndex &index);
 
+    void on_activeTray(QSystemTrayIcon::ActivationReason reason);
+
 private:
     Ui::MainWindow *ui;
     RecordTreeModel * m_pRecordTreeModel;
@@ -60,6 +69,10 @@ private:
     RecordQuery m_cq;
     bool m_bFullScreen;
     bool m_bQueryClass;
+    QSystemTrayIcon * m_systemTray;
+    QMenu * m_menu;
+    QAction * m_actionMain;
+    QAction * m_actionExit;
 };
 
 #endif // MAINWINDOW_H

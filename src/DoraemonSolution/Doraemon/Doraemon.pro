@@ -71,3 +71,10 @@ else:unix: LIBS += -L$$OUT_PWD/../QNetSo/ -lQNetSo
 
 INCLUDEPATH += $$PWD/../QNetSo
 DEPENDPATH += $$PWD/../QNetSo
+
+RESOURCES += \
+    res.qrc
+
+DISTFILES += \
+    res.rc
+RC_FILE += res.rc
