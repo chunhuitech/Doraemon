@@ -2,7 +2,7 @@
 #define QLOGGINGLIB_H
 
 #include <QMutexLocker>
-#include <QSharedPointer>
+#include <QAtomicPointer>
 
 #include "log4qt/logger.h"
 #include "log4qt/basicconfigurator.h"
@@ -27,20 +27,21 @@ private:
 
 private:
     static QMutex m_Mutex;
-    static QSharedPointer<QLoggingLib> m_pInstance;
-
+    static QAtomicPointer<QLoggingLib> m_pInstance;
 public:
-    static QSharedPointer<QLoggingLib>& instance()
-    {
-
-        if (m_pInstance.isNull())
+    static QLoggingLib &instance(void)
         {
-            QMutexLocker mutexLocker(&m_Mutex);
-            if (m_pInstance.isNull())
-                m_pInstance = QSharedPointer<QLoggingLib>(new QLoggingLib());
+    #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
+            if(!QAtomicPointer<QLoggingLib>::isTestAndSetNative())//运行时进行检测
+                qDebug() << "Error: don's support TestAndSetNative!!!!!!";
+    #endif
+            //双重检测加锁
+            if(m_pInstance.testAndSetOrdered(0,0)){
+                QMutexLocker locker(&m_Mutex);
+                m_pInstance.testAndSetOrdered(0, new QLoggingLib);
+            }
+            return * m_pInstance;
         }
-        return m_pInstance;
-    }
     void initLogConfig(QString appPath);
     void info(const QString &rMessage, LogModelValue lmv = LMV_ROOT);
     void debug(const QString &rMessage, LogModelValue lmv = LMV_ROOT);

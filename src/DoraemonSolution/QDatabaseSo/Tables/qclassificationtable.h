@@ -14,10 +14,16 @@ public:
 public:
     void setSqliteUtil(QSqliteUtils * pSqlUtil);
     int getChildCount(int classId);
+    int getCount(RecordQuery cq);
     int getChildRowId(int parentId, int row);
+    int getRowId(int row, RecordQuery cq);
     TreeModelDataItemClassification getRecord(int classId);
     int getParent(int childrenId);
-
+    int handleRecord(QList<ClassificationStruct> classificationList);
+    int insert(ClassificationStruct cfs);
+    int exist(int classId);
+    bool update(ClassificationStruct cfs);
+    bool deleteRecord(int classId);
 private:
     QSqliteUtils * m_pSqlUtil;
 };

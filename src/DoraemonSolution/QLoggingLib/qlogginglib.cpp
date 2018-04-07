@@ -1,7 +1,7 @@
 #include "qlogginglib.h"
 
 QMutex QLoggingLib::m_Mutex;
-QSharedPointer<QLoggingLib> QLoggingLib::m_pInstance;
+QAtomicPointer<QLoggingLib> QLoggingLib::m_pInstance;
 void QLoggingLib::initLogConfig(QString appPath)
 {
     //Log4Qt::BasicConfigurator::configure();

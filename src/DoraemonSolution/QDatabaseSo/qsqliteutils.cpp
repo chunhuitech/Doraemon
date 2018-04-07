@@ -11,6 +11,11 @@ QSqliteUtils::QSqliteUtils()
     m_errorInfoMap[QSqlError::UnknownError] = "Unknown Error";
 }
 
+void QSqliteUtils::setLog(QLoggingLib *pLog)
+{
+    m_pLog = pLog;
+}
+
 QString QSqliteUtils::getErrorInfo(int errorCode)
 {
     QString info;
@@ -50,10 +55,46 @@ bool QSqliteUtils::open(const QString &dbName)
     if (!bOpen) {
         err = m_db.lastError();
         QString info = QString("QSqliteUtils::open error type:%1 error info:%2 ").arg(getErrorInfo(err.type())).arg(err.text());
-        QLoggingLib::instance()->error(info, LMV_DB);
+        m_pLog->error(info, LMV_DB);
         return false;
     }
     return true;
+}
+
+bool QSqliteUtils::Updata(const QString &qsSql)
+{
+    QMutexLocker locker(&m_dbMutex);
+    QSqlQuery sqlQuery(m_db);
+    if (sqlQuery.exec(qsSql))
+    {
+        return true;
+    }
+    else
+    {
+        QSqlError err = sqlQuery.lastError();
+        QString info = QString("CSqliteUtils::Updata error type:%1 error info:%2  sql:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(qsSql);
+        m_pLog->error(info, LMV_DB);
+        return false;
+    }
+}
+
+bool QSqliteUtils::del(QString &table, QString &expression)
+{
+    QMutexLocker locker(&m_dbMutex);
+    //DELETE FROM 表名称 WHERE 列名称 = 值
+    QString sql = QString("delete from ") + table + QString(" where ") + expression;
+    QSqlQuery sqlQuery(m_db);
+    if (sqlQuery.exec(sql))
+    {
+        return true;
+    }
+    else
+    {
+        QSqlError err = m_db.lastError();
+        QString info = QString("CSqliteUtils::del error type:%1 error info:%2 sql:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(sql);
+        m_pLog->error(info, LMV_DB);
+        return false;
+    }
 }
 
 bool QSqliteUtils::dbExists(const QString &tableName)
@@ -74,7 +115,7 @@ bool QSqliteUtils::exec(const QString &strexec)
     if (!bSuccess){
         QSqlError err = query.lastError();
         QString info = QString("QSqliteUtils::transaction exec type:%1 error info:%2 sql:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(strexec);
-        QLoggingLib::instance()->error(info, LMV_DB);
+        m_pLog->error(info, LMV_DB);
     }
     return bSuccess;
 }
@@ -95,7 +136,8 @@ int QSqliteUtils::insert(const QString &qsSql)
     {
         QSqlError err = m_db.lastError();
         QString info = QString("CSqliteUtils::insert error type:%1 error info:%2 sql:%3 ").arg(getErrorInfo(err.type())).arg(err.text()).arg(qsSql);
-        QLoggingLib::instance()->error(info, LMV_DB);
+        //m_pLog->error(info, LMV_DB);
+        qDebug() << info;
     }
     return rowId;
 }
@@ -121,7 +163,7 @@ int QSqliteUtils::getCount(const QString &strexec)
     {
         QSqlError err = query.lastError();
         QString info = QString("QSqliteUtils::getCount exec type:%1 error info:%2 sql:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(strexec);
-        QLoggingLib::instance()->error(info, LMV_DB);
+        m_pLog->error(info, LMV_DB);
     }
     return count;
 }
@@ -134,7 +176,7 @@ bool QSqliteUtils::transaction()
     {
         QSqlError err = m_db.lastError();
         QString info = QString("QSqliteUtils::transaction error type:%1 error info:%2 ").arg(getErrorInfo(err.type())).arg(err.text());
-        QLoggingLib::instance()->error(info, LMV_DB);
+        m_pLog->error(info, LMV_DB);
     }
     return bSuccess;
 }
@@ -147,7 +189,7 @@ bool QSqliteUtils::commit()
     {
         QSqlError err = m_db.lastError();
         QString info = QString("QSqliteUtils::commit error type:%1 error info:%2 ").arg(getErrorInfo(err.type())).arg(err.text());
-        QLoggingLib::instance()->error(info, LMV_DB);
+        m_pLog->error(info, LMV_DB);
     }
     return bSuccess;
 }

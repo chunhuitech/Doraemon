@@ -3,8 +3,8 @@
 # Project created by QtCreator 2018-02-23T23:12:58
 #
 #-------------------------------------------------
-
-QT       += core gui sql
+QT += axcontainer
+QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,10 +14,14 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    Model/classificationtreemodel.cpp
+    Model/classificationtreemodel.cpp \
+    Model/recordtreemodel.cpp \
+    Model/classificationlistmodel.cpp
 
 HEADERS  += mainwindow.h \
-    Model/classificationtreemodel.h
+    Model/classificationtreemodel.h \
+    Model/recordtreemodel.h \
+    Model/classificationlistmodel.h
 
 FORMS    += mainwindow.ui
 
@@ -60,3 +64,10 @@ else:unix: LIBS += -L$$OUT_PWD/../QDatabaseSo/ -lQDatabaseSo
 
 INCLUDEPATH += $$PWD/../QDatabaseSo
 DEPENDPATH += $$PWD/../QDatabaseSo
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../QNetSo/release/ -lQNetSo
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../QNetSo/debug/ -lQNetSo
+else:unix: LIBS += -L$$OUT_PWD/../QNetSo/ -lQNetSo
+
+INCLUDEPATH += $$PWD/../QNetSo
+DEPENDPATH += $$PWD/../QNetSo

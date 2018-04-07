@@ -17,6 +17,7 @@ public:
 
 private:
     ITreeModelData * m_pModelData;
+
 };
 
 #endif // CLASSIFICATIONTREEMODEL_H

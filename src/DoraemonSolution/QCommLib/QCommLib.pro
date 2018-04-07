@@ -12,12 +12,14 @@ CONFIG += staticlib
 
 SOURCES += qcommlib.cpp \
     ModelData/itreemodeldata.cpp \
-    ModelData/treemodeldataitemclassification.cpp
+    ModelData/treemodeldataitemclassification.cpp \
+    ModelData/treemodeldataitemrecord.cpp
 
 HEADERS += qcommlib.h \
     ModelData/itreemodeldata.h \
     ModelData/itreemodeldataitem.h \
-    ModelData/treemodeldataitemclassification.h
+    ModelData/treemodeldataitemclassification.h \
+    ModelData/treemodeldataitemrecord.h
 
 unix {
     target.path = /usr/lib

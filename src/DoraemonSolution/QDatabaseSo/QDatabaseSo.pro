@@ -17,14 +17,22 @@ SOURCES += qdatabaseso.cpp \
     qsqliteutils.cpp \
     Tables/qclassificationtable.cpp \
     dbdefine.cpp \
-    ModelData/dbtreemodeldataclassificationimpl.cpp
+    ModelData/dbtreemodeldataclassificationimpl.cpp \
+    Tables/qdoraemonconfigtable.cpp \
+    Tables/qrecordtable.cpp \
+    ModelData/dbtreemodeldatarecordimpl.cpp \
+    ModelData/dblistmodeldataclassificationimpl.cpp
 
 HEADERS += qdatabaseso.h\
         qdatabaseso_global.h \
     qsqliteutils.h \
     Tables/qclassificationtable.h \
     dbdefine.h \
-    ModelData/dbtreemodeldataclassificationimpl.h
+    ModelData/dbtreemodeldataclassificationimpl.h \
+    Tables/qdoraemonconfigtable.h \
+    Tables/qrecordtable.h \
+    ModelData/dbtreemodeldatarecordimpl.h \
+    ModelData/dblistmodeldataclassificationimpl.h
 
 unix {
     target.path = /usr/lib

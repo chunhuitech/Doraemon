@@ -3,6 +3,7 @@
 #include "itreemodeldataitem.h"
 #include <QVariant>
 #include <QModelIndex>
+#include "../qcommlib.h"
 class ITreeModelData
 {
 public:
@@ -24,6 +25,9 @@ public:
     //行列
     virtual int childCount(int id = 0)  = 0;
     virtual int columnCount(int parentId) = 0;
+
+    //other
+    virtual void setQuery(RecordQuery rq) = 0;
 
 };
 

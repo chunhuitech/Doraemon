@@ -18,6 +18,8 @@ public:
     int childCount(int id = 0);
     int columnCount(int parentId);
 
+    void setQuery(RecordQuery rq) {Q_UNUSED(rq);}
+
 private:
 
 };

@@ -5,4 +5,5 @@ SUBDIRS += \
     QCommLib \
     QControlSo \
     QLoggingLib \
-    QDatabaseSo
+    QDatabaseSo \
+    QNetSo
