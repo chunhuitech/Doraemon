@@ -19,8 +19,12 @@ public:
     int childCount(int id = 0);
     int columnCount(int parentId);
 
+    //ext
+    int realCount();
+
 private:
     RecordQuery m_rq;
+    int m_realCount;
 };
 
 #endif // DBTREEMODELDATARECORDIMPL_H

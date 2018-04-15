@@ -30,6 +30,46 @@ int QRecordTable::insert(RecordStruct rs)
     return NOT_FIND_RECORD_ID;
 }
 
+bool QRecordTable::addRecords(QVector<RecordStruct> &vecRecord)
+{
+    if(m_pSqlUtil){
+        m_pSqlUtil->transaction();
+        for (int i = 0; i < vecRecord.size(); ++i) {
+            insert(vecRecord[i]);
+        }
+        return m_pSqlUtil->commit();
+    }
+    return false;
+}
+
+bool QRecordTable::importRecords(QVector<QString> &vecRecord)
+{
+    if(m_pSqlUtil){
+        m_pSqlUtil->transaction();
+        for (int i = 0; i < vecRecord.size(); ++i) {
+            m_pSqlUtil->insert(vecRecord[i]);
+        }
+        return m_pSqlUtil->commit();
+    }
+    return false;
+}
+
+bool QRecordTable::importRecords(QVector<RecordStruct> &vecRecord)
+{
+    if(m_pSqlUtil){
+        m_pSqlUtil->transaction();
+        for (int i = 0; i < vecRecord.size(); ++i) {
+            if(exist(vecRecord[i].recordId)){
+                update(vecRecord[i]);
+            } else {
+                insert(vecRecord[i]);
+            }
+        }
+        return m_pSqlUtil->commit();
+    }
+    return false;
+}
+
 int QRecordTable::exist(int id)
 {
     QString query_str = QString("select recordId from record where ") + QString("recordId='%1'").arg(id);

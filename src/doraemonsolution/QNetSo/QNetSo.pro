@@ -16,13 +16,23 @@ DEFINES += QNETSO_LIBRARY
 SOURCES += qnetso.cpp \
     http/basehttp.cpp \
     http/classificatonapi.cpp \
-    http/recordapi.cpp
+    http/recordapi.cpp \
+    http/productinoapi.cpp \
+    http/productactivityapi.cpp \
+    downloadmanager.cpp \
+    textprogressbar.cpp \
+    http/configapi.cpp
 
 HEADERS += qnetso.h\
         qnetso_global.h \
     http/basehttp.h \
     http/classificatonapi.h \
-    http/recordapi.h
+    http/recordapi.h \
+    http/productinoapi.h \
+    http/productactivityapi.h \
+    downloadmanager.h \
+    textprogressbar.h \
+    http/configapi.h
 
 unix {
     target.path = /usr/lib

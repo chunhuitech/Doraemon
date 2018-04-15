@@ -30,6 +30,6 @@ void ClassificationNetOper::exitHandler()
 
 void ClassificationNetOper::onThreadFinished()
 {
-    qDebug() <<"on net ThreadFinished";
+//    qDebug() <<"on net ThreadFinished";
 }
 

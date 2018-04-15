@@ -19,7 +19,7 @@ public:
      int childCount(int id = 0);
     int columnCount(int parentId);
 
-
+    int realCount() {return 0;}
      void setQuery(RecordQuery rq);
 
 private:

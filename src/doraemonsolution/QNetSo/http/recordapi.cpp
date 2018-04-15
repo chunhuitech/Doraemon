@@ -42,18 +42,18 @@ void RecordAPI::requestFinished(QNetworkReply *reply, const QByteArray data, con
             if(resJsonDoc.isObject()){
                 SyncRetRecordStruct sRRS;
                 QVariantMap result = resJsonDoc.toVariant().toMap();
-                qDebug() << "code:" << result["code"].toString();
-                qDebug() << "msg:" << result["msg"].toString();
+                code = result["code"].toInt();
+                msg = result["msg"].toString();
                 QVariantMap jsonData = result["data"].toMap();
-                qDebug() << "lastModTime:" << jsonData["lastModTime"].toLongLong();
+//                qDebug() << "lastModTime:" << jsonData["lastModTime"].toLongLong();
                 sRRS.lastModTime = jsonData["lastModTime"].toLongLong();
                 QVariantList jsonDataList = jsonData["dataList"].toList();
-                QString info = QString("record sync finish cout:%1").arg(jsonDataList.size());
+                QString info = QString("record sync finish cout:%1 code: %2  msg: %3").arg(QString::number(jsonDataList.size())).arg(QString::number(code)).arg(msg);
                 m_pLog->info(info, LMV_NET);
                 for(int i=0; i < jsonDataList.size(); i++){
                     QVariantMap jsonDataItem = jsonDataList[i].toMap();
-                    qDebug() << "recordId:" << jsonDataItem["id"].toInt();
-                    qDebug() << "title:" << jsonDataItem["title"].toString();
+//                    qDebug() << "recordId:" << jsonDataItem["id"].toInt();
+//                    qDebug() << "title:" << jsonDataItem["title"].toString();
                     RecordStruct rs;
                     rs.recordId = jsonDataItem["id"].toInt();
                     rs.classId = jsonDataItem["classId"].toInt();
@@ -70,10 +70,10 @@ void RecordAPI::requestFinished(QNetworkReply *reply, const QByteArray data, con
                     rs.createTime = jsonDataItem["createTime"].toLongLong() / 1000;
                     sRRS.recordList.append(rs);
                 }
-                if(sRRS.lastModTime > 0 && sRRS.recordList.length() > 0){
+//                if(sRRS.lastModTime > 0 && sRRS.recordList.length() > 0){
                     dataVar.setValue(sRRS);
                     emit signSyncRecordFinished(code, msg, dataVar);
-                }
+//                }
             }
         }
     }

@@ -5,6 +5,7 @@
 RecordTreeModel::RecordTreeModel()
 {
     m_pModelData = new DBTreeModelDataRecordImpl();
+    m_maxCountShow = 100;
 }
 
 void RecordTreeModel::setQuery(RecordQuery rq)
@@ -42,6 +43,9 @@ int RecordTreeModel::rowCount(const QModelIndex &parent) const
     int parentItem = NOT_FIND_RECORD_ID;
 
     int count = m_pModelData->childCount(parentItem);
+    if(count > m_maxCountShow){
+        return m_maxCountShow;
+    }
     return count;
 }
 
@@ -115,5 +119,15 @@ QVariant RecordTreeModel::headerData(int section, Qt::Orientation orientation, i
     }
 
     return rv;
+}
+
+int RecordTreeModel::realCount()
+{
+    return m_pModelData->realCount();
+}
+
+void RecordTreeModel::setMaxCount(int maxCount)
+{
+    m_maxCountShow = maxCount;
 }
 

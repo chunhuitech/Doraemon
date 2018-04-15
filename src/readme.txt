@@ -1,3 +1,9 @@
+
+发布：
+Ctrl + R 打开运行，输入CMD，打开命令行
+输入如下命令
+C:\Qt\Qt5.5.1\mingw492x86\5.5\mingw492_32\bin\windeployqt.exe D:\chunhuitech\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\Doraemon\release\Doraemon\Doraemon.exe
+
 后缀为.so（shared object）的文件为Linux上的动态库文件，Linux上的静态库文件为.a(akynesis)
 
 

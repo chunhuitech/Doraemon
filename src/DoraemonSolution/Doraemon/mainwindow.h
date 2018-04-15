@@ -8,6 +8,7 @@
 #include "Model/classificationtreemodel.h"
 #include "Model/classificationlistmodel.h"
 #include "Model/recordtreemodel.h"
+#include "qnetso.h"
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
@@ -36,13 +37,24 @@ protected:
     void widgetHideShow();
     void modelViewHandel();
     void trayHandle();
+    void configFileHandle();
+
+    void importDBData();
+
+    void pushActiveInfo();
+
+    void skinHandle();
 
 private slots:
 
     void on_MainWindow_destroyed();
 
-    void OnSignSaveClassInfoFinished2UI(int code);
-    void OnSignSaveRecordInfoFinished2UI(int code);
+    void OnSignSaveClassInfoFinished2UI(int code, int count);
+    void OnSignSaveRecordInfoFinished2UI(int code, int count);
+    void OnSignImportDBDataFinished2UI(int code, int count);
+    void OnSignCheckVersionFinished2UI(int code, QString msg, const QVariant& mark);
+    void OnSignDownDorFileFinished2UI(int code, int count);
+    void OnSignGetDorDataVersionFinished2UI(int code, QString msg, const QVariant& mark);
 
     void on_uiRecordTreeView_doubleClicked(const QModelIndex &index);
 
@@ -60,6 +72,12 @@ private slots:
 
     void on_activeTray(QSystemTrayIcon::ActivationReason reason);
 
+    void on_verCheckAction_triggered();
+
+    void on_uiLineEditRecordKey_returnPressed();
+
+    void on_uiLineEditClassKey_returnPressed();
+
 private:
     Ui::MainWindow *ui;
     RecordTreeModel * m_pRecordTreeModel;
@@ -73,6 +91,7 @@ private:
     QMenu * m_menu;
     QAction * m_actionMain;
     QAction * m_actionExit;
+    CommonData commonData;
 };
 
 #endif // MAINWINDOW_H

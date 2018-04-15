@@ -2,7 +2,7 @@
 #include "../qdatabaseso.h"
 DBTreeModelDataRecordImpl::DBTreeModelDataRecordImpl()
 {
-
+    m_realCount =0;
 }
 
 void DBTreeModelDataRecordImpl::setQuery(RecordQuery rq)
@@ -31,12 +31,18 @@ QVariant DBTreeModelDataRecordImpl::data(int recordId)
 
 int DBTreeModelDataRecordImpl::childCount(int id)
 {
-    return QDatabaseSo::instance().getRecordChildCount(m_rq, id);
+    m_realCount = QDatabaseSo::instance().getRecordChildCount(m_rq, id);
+    return m_realCount;
 }
 
 int DBTreeModelDataRecordImpl::columnCount(int parentId)
 {
     Q_UNUSED(parentId);
     return RC_Count;
+}
+
+int DBTreeModelDataRecordImpl::realCount()
+{
+    return m_realCount;
 }
 

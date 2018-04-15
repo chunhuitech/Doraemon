@@ -7,18 +7,31 @@
 #include "net/classificationnetoper.h"
 #include "http/classificatonapi.h"
 #include "http/recordapi.h"
+#include "http/productinoapi.h"
+#include "http/productactivityapi.h"
+#include "http/configapi.h"
+#include "downloadmanager.h"
 #include "dbs/qdboper.h"
 #include "qlogginglib.h"
-class QCONTROLSOSHARED_EXPORT QControlSo  : public QObject
+class QCONTROLSOSHARED_EXPORT QControlSo : public QObject
 {
     Q_OBJECT
 public:
 
+    // check dor ver
+    void getDorDataVersion();
+    //down dor data文件
+    void downDorDataFile(QString downAddr);
+    //push Active
+    void pushActiveInfo(ProductActivityStruct pas);
+    //版本检测
+    void checkVersion(VersionInfoStruct vis);
     /////分类数据处理/////
     void syncClassification();
 
     ////记录数据处理////
     void syncRecord();
+    void importRecords();
 
 public:
 
@@ -40,13 +53,21 @@ public:
 
 public slots :
     void OnSignSyncClassFinished(int code, QString msg, const QVariant& mark);
-    void OnSignSaveClassInfoFinished(int code);
-    void OnSignSaveRecordInfoFinished(int code);
+    void OnSignSaveClassInfoFinished(int code, int count);
+    void OnSignSaveRecordInfoFinished(int code, int count);
+    void OnSignImportDBDataFinished(int code, int count);
+    void downFinished();
 
     void OnSignSyncRecordFinished(int code, QString msg, const QVariant& mark);
+    void OnSignCheckVersionFinished(int code, QString msg, const QVariant& mark);
+    void OnSignGetDorDataVersionFinished(int code, QString msg, const QVariant& mark);
 signals:
-    void signSaveClassInfoFinished2UI(int code);
-    void signSaveRecordInfoFinished2UI(int code);
+    void signSaveClassInfoFinished2UI(int code, int count);
+    void signSaveRecordInfoFinished2UI(int code, int count);
+    void signImportDBDataFinished2UI(int code, int count);
+    void signCheckVersionFinished2UI(int code, QString msg, const QVariant& mark);
+    void signDownDorFileFinished2UI(int code, int count);
+    void signGetDorDataVersionFinished2UI(int code, QString msg, const QVariant& mark);
 
 private:
 //    由于网络请求本向就是异步的，所以这里就不需要再单独封装在线程中处理了，否则Cannot create children for a parent that is in a different thread
@@ -54,6 +75,10 @@ private:
     ClassificatonAPI classAPI;
     RecordAPI recordAPI;
     QDBOper dbOper;
+    ProductInoAPI productInfoApi;
+    ProductActivityAPI productActivityApi;
+    DownloadManager manager;
+    ConfigApi configApi;
 
 private:
     QControlSo();

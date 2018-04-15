@@ -18,6 +18,9 @@ public:
     void setSqliteUtil(QSqliteUtils * pSqlUtil);
     void setLog(QLoggingLib* pLog);
     int insert(RecordStruct rs);
+    bool addRecords(QVector<RecordStruct>& vecRecord);
+    bool importRecords(QVector<QString> & vecRecord);
+    bool importRecords(QVector<RecordStruct> & vecRecord);
     int exist(int id);
     bool update(RecordStruct rs);
     bool deleteRecord(int id);

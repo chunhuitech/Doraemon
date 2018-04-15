@@ -28,6 +28,7 @@ public:
 
     //other
     virtual void setQuery(RecordQuery rq) = 0;
+    virtual int realCount() = 0;
 
 };
 

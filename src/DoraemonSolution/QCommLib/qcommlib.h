@@ -5,6 +5,9 @@
 #include <QMutex>
 #include <QDebug>
 #include <QAtomicPointer>
+#include <QFile>
+#include <QByteArray>
+#include <QBitArray>
 typedef char int8_t;
 typedef short int16_t;
 typedef int int32_t;
@@ -17,7 +20,15 @@ typedef unsigned long long uint64_t;
 const int GB = 1024 * 1024 * 1024;
 const int MB = 1024 * 1024;
 const int KB = 1024;
-
+//quint64
+#define DB_VERSION  "dbver"
+#define UI_MAX_RECORD_SHOW  "maxrecordshow"
+#define VERSION "1.0.0"
+#define VERSION_NUM "10000"
+#define APP_NAME "Doraemon"
+#define APP_ID "1"
+#define APP_PLAT_FORM "Qt"
+#define EVENT_START_UP    "start-up"
 enum RecordStatusValue
 {
     RSV_NORMAL = 0,
@@ -39,6 +50,11 @@ enum ErrorCode
     EC_DB = 900002
 };
 
+struct CommonData {
+    QString iniFileName;
+    int dbVersion;
+    int maxRecordShow;
+};
 
 
 ///////数据库表结构体/////////
@@ -74,6 +90,40 @@ struct RecordStruct
 };
 Q_DECLARE_METATYPE(RecordStruct)
 
+struct VersionInfoStruct
+{
+    int verNum;
+    QString version;
+    QString downAddress;
+    QString appName;
+    QString platform;
+};
+Q_DECLARE_METATYPE(VersionInfoStruct)
+
+struct ProductActivityStruct
+{
+    int userId;
+    QString clientFlag;
+    QString procName;
+    QString procVersion;
+    int procId;
+    QString os;
+    QString eventName;
+    QString ip;
+    QString netIp;
+    QString area;
+    QString modifyTime;
+    QString createTime;
+    QString remarks;
+};
+Q_DECLARE_METATYPE(ProductActivityStruct)
+
+struct IpInfoStruct
+{
+    QString netIp;
+    QString areaInfo;
+};
+
 struct DoraemonConfigTable
 {
     uint id;
@@ -81,6 +131,13 @@ struct DoraemonConfigTable
     QString keyValue;
 };
 
+
+struct DorDataFileStruct
+{
+    int versionNum;
+    QString downAddress;
+};
+Q_DECLARE_METATYPE(DorDataFileStruct)
 
 
 struct SyncRetClassificationStruct
@@ -139,6 +196,10 @@ public:
 
     QString getErrorMessage(int code);
     QString bytesToGBMBKB(int size);
+    void Zip (QString filename , QString zipfilename);
+    void Unzip (QString zipfilename , QString filename);
+
+//    CommonData commonData;
 private:
     QCommLib();
     QCommLib(const QCommLib &);

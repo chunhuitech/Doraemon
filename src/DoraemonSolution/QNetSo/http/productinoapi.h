@@ -1,27 +1,31 @@
-#ifndef CLASSIFICATONAPI_H
-#define CLASSIFICATONAPI_H
+#ifndef PRODUCTINOAPI_H
+#define PRODUCTINOAPI_H
 #include "basehttp.h"
 #include "qcommlib.h"
 #include "../qnetso_global.h"
 #include <QVariant>
 #include "qlogginglib.h"
-class QNETSOSHARED_EXPORT ClassificatonAPI : public BaseHttp
+
+class QNETSOSHARED_EXPORT ProductInoAPI : public BaseHttp
 {
     Q_OBJECT
 public:
-    ClassificatonAPI();
-    ~ClassificatonAPI();
+    ProductInoAPI();
+    ~ProductInoAPI();
 
 public:
-    void syncData(qlonglong lastTime);
+    void checkVersion(VersionInfoStruct vis);
     void setLog(QLoggingLib* pLog);
+
+
 signals:
-    void signSyncClassFinished(int code, QString msg, const QVariant& mark);
+    void signCheckVersionFinished(int code, QString msg, const QVariant& mark);
 
 protected:
     void requestFinished(QNetworkReply* reply, const QByteArray data, const int statusCode);
+
 private:
     QLoggingLib* m_pLog;
 };
 
-#endif // CLASSIFICATONAPI_H
+#endif // PRODUCTINOAPI_H

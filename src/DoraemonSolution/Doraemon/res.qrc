@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/doraemon">
         <file>res/Doraemon.png</file>
+        <file>res/fullscreen.png</file>
+        <file>res/search.png</file>
     </qresource>
 </RCC>

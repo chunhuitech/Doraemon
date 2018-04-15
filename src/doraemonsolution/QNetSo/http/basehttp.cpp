@@ -46,7 +46,7 @@ void BaseHttp::get(const QString url)
 
 void BaseHttp::post(const QString url, const QByteArray &data)
 {
-    qDebug() << "BaseHttp::post thread Id:" << QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
+//    qDebug() << "BaseHttp::post thread Id:" << QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0'));
 //    QLoggingLib::instance().info("BaseHttp::post thread Id:" + QString::number((uint64_t)QThread::currentThreadId()), LMV_NET);
 //    QLoggingLib::instance().info("BaseHttp::post thread: + " + QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0')));
     httpRequest.setUrl(QUrl(url));

@@ -2,9 +2,14 @@
 #include <QtWidgets/QApplication>
 #include "qdatabaseso.h"
 #include "qlogginglib.h"
+#include <QTextStream>
+#include <QTextCodec>
+#include <QSettings>
+
 
 QMutex QDatabaseSo::m_Mutex;
 QAtomicPointer<QDatabaseSo> QDatabaseSo::m_pInstance;
+
 
 QDatabaseSo::QDatabaseSo()
 {
@@ -67,29 +72,109 @@ int QDatabaseSo::getClassificationParent(int childrenId)
 
 bool QDatabaseSo::saveClassInfo(const SyncRetClassificationStruct srcs)
 {
-//    QWriteLocker locker(&internalMutex);
-    bool sucess = m_tableConfig.updateClassSyncTime(srcs.lastModTime);
-    //保存记录
-    sucess = m_tableClassification.handleRecord(srcs.classificationList);
+    bool sucess = true;
+    if(srcs.classificationList.size() > 0){
+        sucess = m_tableConfig.updateClassSyncTime(srcs.lastModTime);
+        //保存记录
+        sucess = m_tableClassification.handleRecord(srcs.classificationList);
+    }
+
     if(sucess){
-        emit signSaveClassInfoFinished(EC_SUCCESS);
+        emit signSaveClassInfoFinished(EC_SUCCESS, srcs.classificationList.size());
     } else {
-        emit signSaveClassInfoFinished(EC_ERROR);
+        emit signSaveClassInfoFinished(EC_ERROR, srcs.classificationList.size());
     }
     return sucess;
 }
 
 bool QDatabaseSo::saveRecordInfo(const SyncRetRecordStruct srrs)
 {
-    bool sucess = m_tableConfig.updateRecordSyncTime(srrs.lastModTime);
-    //保存记录
-    sucess = m_tableRecord.handleRecord(srrs.recordList);
+    bool sucess = true;
+    if(srrs.recordList.size() > 0){
+        sucess = m_tableConfig.updateRecordSyncTime(srrs.lastModTime);
+        //保存记录
+        sucess = m_tableRecord.handleRecord(srrs.recordList);
+    }
+
     if(sucess){
-        emit signSaveRecordInfoFinished(EC_SUCCESS);
+        emit signSaveRecordInfoFinished(EC_SUCCESS, srrs.recordList.size());
     } else {
-        emit signSaveRecordInfoFinished(EC_ERROR);
+        emit signSaveRecordInfoFinished(EC_ERROR, srrs.recordList.size());
     }
     return sucess;
+}
+
+bool QDatabaseSo::importRecords(QVector<QString> &vecRecord)
+{
+    return m_tableRecord.importRecords(vecRecord);
+}
+
+bool QDatabaseSo::importRecords()
+{
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));//中文转码声明
+    QString recordDorFileFullPath = QApplication::applicationDirPath() + "/data/comm_record.dor";
+    QString recordFileFullPath = QApplication::applicationDirPath() + "/data/comm_record.txt";
+    QCommLib::instance().Unzip(recordDorFileFullPath, recordFileFullPath);
+    QFile file(recordFileFullPath);
+    if(!file.open(QIODevice::ReadOnly))
+         m_pLog->error("QDatabaseSo::importRecords OPEN FILE FAILED." + recordFileFullPath, LMV_DB);
+    QTextStream * out = new QTextStream(&file);//文本流
+    QString fileContent = out->readAll();
+    file.close();
+    QStringList tempOption = fileContent.split("\r\n");
+    QVector<RecordStruct> vecRecord;
+    QString dbVersion;
+    for(int i = 0 ; i < tempOption.count() ; i++)
+    {
+        if(i==0){
+            QStringList tempbar = tempOption.at(i).split("=");
+            if(tempbar.length() != 2 || QString(tempbar.at(0)) != DB_VERSION) {
+                m_pLog->error("QDatabaseSo::importRecords comm_record.txt format error.", LMV_DB);
+                return false;
+            }
+            dbVersion = QString(tempbar.at(1));
+        } else {
+            QStringList tempbar = tempOption.at(i).split(",");
+            if(tempbar.length() >= 13){
+                RecordStruct stRecord;
+                stRecord.recordId = tempbar.at(0).toInt();
+                stRecord.classId = tempbar.at(1).toInt();
+                stRecord.sortNum = tempbar.at(2).toInt();
+                stRecord.title = QString(tempbar.at(3));
+                stRecord.label = QString(tempbar.at(4));
+                stRecord.relativePath = QString(tempbar.at(5));
+                stRecord.fileSize = tempbar.at(6).toInt();
+                stRecord.fileType = QString(tempbar.at(7));
+                stRecord.contentHtml = QString(tempbar.at(8));
+                stRecord.contentPlain = QString(tempbar.at(9));
+                stRecord.status = tempbar.at(10).toInt();
+                QString modifyTime = QString(tempbar.at(11));
+                modifyTime = modifyTime.left(modifyTime.length() -3);
+                stRecord.modifyTime = modifyTime.toInt();
+                QString createTime = QString(tempbar.at(12));
+                createTime = createTime.left(createTime.length() -3);
+                stRecord.createTime = createTime.toInt();
+    //            qDebug() << stRecord.recordId << " " << stRecord.title << " " <<stRecord.relativePath;
+                vecRecord.push_back(stRecord);
+            }
+        }
+
+    }
+    bool okImport = m_tableRecord.importRecords(vecRecord);
+    if(okImport){
+        QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
+        settings.setValue(DB_VERSION, dbVersion);
+        emit signImportDBDataFinished(EC_SUCCESS, vecRecord.size());
+    } else {
+        emit signImportDBDataFinished(EC_ERROR, vecRecord.size());
+    }
+    QFile fileTxt(recordFileFullPath);
+    if (fileTxt.exists())
+    {
+        fileTxt.remove();
+     }
+
+    return okImport;
 }
 
 

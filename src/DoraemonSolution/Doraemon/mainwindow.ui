@@ -31,7 +31,19 @@
        <widget class="QWidget" name="layoutWidget">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
-          <number>6</number>
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
          </property>
          <item>
           <widget class="QLineEdit" name="uiLineEditClassKey">
@@ -56,7 +68,10 @@
          <item>
           <widget class="QPushButton" name="uiPushButtonQueryClass">
            <property name="text">
-            <string>查询分类</string>
+            <string/>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -212,6 +227,21 @@
            <item>
             <widget class="QWidget" name="uiWidgetFullScreen" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <spacer name="horizontalSpacer">
                 <property name="orientation">
@@ -228,7 +258,10 @@
               <item>
                <widget class="QPushButton" name="uiPushButtonFullScreen">
                 <property name="text">
-                 <string>全屏</string>
+                 <string/>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -241,6 +274,21 @@
        </widget>
        <widget class="QWidget" name="layoutWidget2">
         <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
@@ -292,7 +340,13 @@
            <item>
             <widget class="QPushButton" name="uiPushButtonRecordQuery">
              <property name="text">
-              <string>查询</string>
+              <string/>
+             </property>
+             <property name="autoDefault">
+              <bool>false</bool>
+             </property>
+             <property name="flat">
+              <bool>true</bool>
              </property>
             </widget>
            </item>
@@ -330,7 +384,14 @@
     </property>
     <addaction name="syncAction"/>
    </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="verCheckAction"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -344,6 +405,11 @@
   <action name="syncAction">
    <property name="text">
     <string>更新数据</string>
+   </property>
+  </action>
+  <action name="verCheckAction">
+   <property name="text">
+    <string>版本信息</string>
    </property>
   </action>
  </widget>

@@ -1,6 +1,5 @@
 #include "qcommlib.h"
 
-
 QMutex QCommLib::m_Mutex;
 QAtomicPointer<QCommLib> QCommLib::m_pInstance;
 
@@ -31,4 +30,30 @@ QString QCommLib::bytesToGBMBKB(int size)
         return QString("%1 KB").arg(QString::number(size / (float)KB, 'f', 2));
     else
         return QString("%1 Bytes").arg(size);
+}
+
+void QCommLib::Zip(QString filename, QString zipfilename)
+{
+    QFile infile(filename);
+    QFile outfile(zipfilename);
+    infile.open(QIODevice::ReadOnly);
+    outfile.open(QIODevice::WriteOnly);
+    QByteArray uncompressedData = infile.readAll();
+    QByteArray compressedData = qCompress(uncompressedData,9);
+    outfile.write(compressedData);
+    infile.close();
+    outfile.close();
+}
+
+void QCommLib::Unzip(QString zipfilename, QString filename)
+{
+    QFile infile(zipfilename);
+    QFile outfile(filename);
+    infile.open(QIODevice::ReadOnly);
+    outfile.open(QIODevice::WriteOnly);
+    QByteArray uncompressedData = infile.readAll();
+    QByteArray compressedData = qUncompress(uncompressedData);
+    outfile.write(compressedData);
+    infile.close();
+    outfile.close();
 }

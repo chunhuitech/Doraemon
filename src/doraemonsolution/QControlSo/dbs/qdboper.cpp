@@ -9,7 +9,12 @@ QDBOper::QDBOper()
             &m_threadDbEntity, SLOT(OnSaveClassInfo(const QVariant&)), Qt::QueuedConnection);
     QObject::connect(this, SIGNAL(signSaveRecordInfo(const QVariant&)),
             &m_threadDbEntity, SLOT(OnSaveRecordInfo(const QVariant&)), Qt::QueuedConnection);
+    QObject::connect(this, SIGNAL(signImportRecords()),
+            &m_threadDbEntity, SLOT(OnImportRecords()), Qt::QueuedConnection);
+
+
     m_threadDbEntity.moveToThread(&m_dbThread);
+    emit signalPrintDbThreadId();
     m_dbThread.start();
 }
 
@@ -27,8 +32,26 @@ void QDBOper::saveRecordInfo(const SyncRetRecordStruct srrs)
     emit signSaveRecordInfo(dataVar);
 }
 
+void QDBOper::importRecords()
+{
+    emit signImportRecords();
+}
+
+void QDBOper::setLog(QLoggingLib *pLog)
+{
+    m_pLog = pLog;
+    m_threadDbEntity.setLog(pLog);
+}
+
+void QDBOper::exitHandler()
+{
+    m_dbThread.quit();
+    m_dbThread.wait();
+}
+
 void QDBOper::onThreadFinished()
 {
-    qDebug() <<"on db ThreadFinished";
+    if(m_pLog)
+        m_pLog->info("on QDBOper ThreadFinished");
 }
 

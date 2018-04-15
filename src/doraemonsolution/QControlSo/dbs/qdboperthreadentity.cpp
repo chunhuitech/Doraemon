@@ -1,10 +1,14 @@
 #include "qdboperthreadentity.h"
-#include "qlogginglib.h"
 #include "qdatabaseso.h"
 #include <QThread>
 QDBOperThreadEntity::QDBOperThreadEntity()
 {
+    m_pLog = NULL;
+}
 
+void QDBOperThreadEntity::setLog(QLoggingLib *pLog)
+{
+    m_pLog = pLog;
 }
 
 
@@ -13,7 +17,7 @@ void QDBOperThreadEntity::OnSaveClassInfo(const QVariant &mark)
     if(mark.canConvert<SyncRetClassificationStruct>())
     {
         SyncRetClassificationStruct sRCS = mark.value<SyncRetClassificationStruct>();
-        qDebug() << sRCS.lastModTime;
+//        qDebug() << sRCS.lastModTime;
         QDatabaseSo::instance().saveClassInfo(sRCS);
     }
 }
@@ -23,13 +27,19 @@ void QDBOperThreadEntity::OnSaveRecordInfo(const QVariant &mark)
     if(mark.canConvert<SyncRetRecordStruct>())
     {
         SyncRetRecordStruct sRRS = mark.value<SyncRetRecordStruct>();
-        qDebug() << sRRS.lastModTime;
+//        qDebug() << sRRS.lastModTime;
         QDatabaseSo::instance().saveRecordInfo(sRRS);
     }
 }
 
+void QDBOperThreadEntity::OnImportRecords()
+{
+    QDatabaseSo::instance().importRecords();
+}
+
 void QDBOperThreadEntity::onPrintDbThreadId()
 {
-    QLoggingLib::instance().info("db thread Id:" + QString::number((uint64_t)QThread::currentThreadId()), LMV_DB);
+    if(m_pLog)
+        m_pLog->info("QDBOper thread Id:" + QStringLiteral("@0x%1").arg(quintptr(QThread::currentThreadId()), 16, 16, QLatin1Char('0')), LMV_DB);
 }
 

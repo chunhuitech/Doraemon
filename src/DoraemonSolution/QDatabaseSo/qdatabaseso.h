@@ -55,6 +55,8 @@ public:
     int getRecordChildCount(RecordQuery rq, int id);
     RecordStruct getRecordRecord(int recordId);
     bool saveRecordInfo(const SyncRetRecordStruct srrs);
+    bool importRecords(QVector<QString> & vecRecord);
+    bool importRecords();
     /////doraemon_config table//////////
     qlonglong getClassSyncTimeConfig();
     qlonglong getRecordSyncTimeConfig();
@@ -76,8 +78,9 @@ private:
     static QAtomicPointer<QDatabaseSo> m_pInstance;
 
 signals:
-    void signSaveClassInfoFinished(int code);
-    void signSaveRecordInfoFinished(int code);
+    void signSaveClassInfoFinished(int code, int count);
+    void signSaveRecordInfoFinished(int code, int count);
+    void signImportDBDataFinished(int code, int count);
 };
 
 
