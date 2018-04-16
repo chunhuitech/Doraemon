@@ -22,12 +22,11 @@ void QNetSo::setLog(QLoggingLib *pLog)
 
 QString QNetSo::gethostMac()
 {
-    QList<QNetworkInterface> nets = QNetworkInterface::allInterfaces();// 获取所有网络接口列表
+    QList<QNetworkInterface> nets = QNetworkInterface::allInterfaces();
     int nCnt = nets.count();
     QString strMacAddr = "";
     for(int i = 0; i < nCnt; i ++)
     {
-        // 如果此网络接口被激活并且正在运行并且不是回环地址，则就是我们需要找的Mac地址
         if(nets[i].flags().testFlag(QNetworkInterface::IsUp) && nets[i].flags().testFlag(QNetworkInterface::IsRunning)
                 && !nets[i].flags().testFlag(QNetworkInterface::IsLoopBack))
         {
@@ -42,7 +41,6 @@ QString QNetSo::gethostIp()
 {
     QString strIpAddress;
     QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
-    // 获取第一个本主机的IPv4地址
     int nListSize = ipAddressesList.size();
     for (int i = 0; i < nListSize; ++i)
     {
@@ -53,7 +51,6 @@ QString QNetSo::gethostIp()
            break;
        }
      }
-     // 如果没有找到，则以本地IP地址为IP
      if (strIpAddress.isEmpty())
         strIpAddress = QHostAddress(QHostAddress::LocalHost).toString();
      return strIpAddress;
@@ -143,7 +140,7 @@ QString QNetSo::GetAttributionPconline(QByteArray responseData)
         list = attribution.split("</p>");
         attribution = list[0];
     }
-    QStringList addInfo =  attribution.split("：");
+    QStringList addInfo =  attribution.split("��");
     if(addInfo.count() > 1){
         return addInfo[1].trimmed();
     }

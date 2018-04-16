@@ -15,10 +15,9 @@ public:
     static QNetSo &instance(void)
         {
     #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
-            if(!QAtomicPointer<QNetSo>::isTestAndSetNative())//运行时进行检测
+            if(!QAtomicPointer<QNetSo>::isTestAndSetNative())
                 qDebug() << "Error: don's support TestAndSetNative!!!!!!QNetSo";
     #endif
-            //双重检测加锁
             if(m_pInstance.testAndSetOrdered(0,0)){
                 QMutexLocker locker(&m_Mutex);
                 m_pInstance.testAndSetOrdered(0, new QNetSo);
@@ -35,7 +34,6 @@ public:
 private:
     QByteArray GetHtml(QString url);
     QString GetNetIPPconline(QByteArray responseData);
-    //获取外网的归属地
     QString GetAttributionPconline(QByteArray responseData);
 
 private:
