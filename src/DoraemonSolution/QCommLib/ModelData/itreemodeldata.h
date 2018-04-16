@@ -8,7 +8,7 @@ class ITreeModelData
 {
 public:
 //    ITreeModelData();
-    //项
+    //Item
 //    virtual ITreeModelDataItem *child(int number) = 0;
     virtual int parent(int childrenId) = 0;
     virtual int index(int parentId, int row) = 0;
@@ -20,9 +20,7 @@ public:
 //    virtual ITreeModelData *childExist(const ITreeModelDataItem * tmdi) = 0;
 //    virtual bool removeChildren(int position, int count) = 0;
 //    virtual bool setData(const ITreeModelDataItem * tmdi) = 0;
-    //如何删除相关项目(递归)？
 
-    //行列
     virtual int childCount(int id = 0)  = 0;
     virtual int columnCount(int parentId) = 0;
 

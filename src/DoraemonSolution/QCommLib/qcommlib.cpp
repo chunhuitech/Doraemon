@@ -5,9 +5,9 @@ QAtomicPointer<QCommLib> QCommLib::m_pInstance;
 
 QCommLib::QCommLib()
 {
-    mapErrorCode.insert(0, "成功");
-    mapErrorCode.insert(900000, "未知错误");
-    mapErrorCode.insert(900002, "数据库错误");
+    mapErrorCode.insert(0, "Success");
+    mapErrorCode.insert(900000, "Unknown error");
+    mapErrorCode.insert(900002, "Database error");
 }
 
 QString QCommLib::getErrorMessage(int code)
@@ -17,7 +17,7 @@ QString QCommLib::getErrorMessage(int code)
         QMap<int,QString>::iterator it = mapErrorCode.find(code);
         return it.value();
     }
-    return "未查找到错误码信息";
+    return "Error code information is not found";
 }
 
 QString QCommLib::bytesToGBMBKB(int size)

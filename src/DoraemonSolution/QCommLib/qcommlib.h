@@ -57,7 +57,7 @@ struct CommonData {
 };
 
 
-///////数据库表结构体/////////
+///////Database table structure/////////
 struct ClassificationStruct
 {
     int id;
@@ -154,7 +154,7 @@ struct SyncRetRecordStruct
 };
 Q_DECLARE_METATYPE(SyncRetRecordStruct)
 
-//查询条件
+//query criteria
 struct RecordQuery
 {
     int classId;
@@ -164,8 +164,7 @@ struct RecordQuery
     QString queryKey;
 };
 
-
-//列头
+//Column Headers
 enum RecordColumn {
     RC_Title,
     RC_FileSize,
@@ -181,10 +180,10 @@ public:
     static QCommLib &instance(void)
         {
     #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
-            if(!QAtomicPointer<QCommLib>::isTestAndSetNative())//运行时进行检测
+            if(!QAtomicPointer<QCommLib>::isTestAndSetNative())//Test at runtime
                 qDebug() << "Error: don's support TestAndSetNative!!!!!!";
     #endif
-            //双重检测加锁
+            //Double detection and lock
             if(m_pInstance.testAndSetOrdered(0,0)){
                 QMutexLocker locker(&m_Mutex);
                 m_pInstance.testAndSetOrdered(0, new QCommLib);

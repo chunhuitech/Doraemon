@@ -3,5 +3,6 @@
         <file>res/Doraemon.png</file>
         <file>res/fullscreen.png</file>
         <file>res/search.png</file>
+        <file>res/reset.png</file>
     </qresource>
 </RCC>

@@ -32,10 +32,10 @@ public:
     static QLoggingLib &instance(void)
         {
     #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
-            if(!QAtomicPointer<QLoggingLib>::isTestAndSetNative())//运行时进行检测
+            if(!QAtomicPointer<QLoggingLib>::isTestAndSetNative())
                 qDebug() << "Error: don's support TestAndSetNative!!!!!!";
     #endif
-            //双重检测加锁
+
             if(m_pInstance.testAndSetOrdered(0,0)){
                 QMutexLocker locker(&m_Mutex);
                 m_pInstance.testAndSetOrdered(0, new QLoggingLib);

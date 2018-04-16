@@ -54,7 +54,7 @@ void MainWindow::OnSignSaveClassInfoFinished2UI(int code, int count)
     if(count > 0) {
         ui->uiClassTreeView->reset();
     }
-    QString info = QString("åˆ†ç±»åŒæ­¥å®Œæˆ %1").arg(QString::number(count));
+    QString info = QString("Classification synchronization completion %1").arg(QString::number(count));
     ui->statusBar->showMessage(info, 10000);
 }
 
@@ -64,7 +64,7 @@ void MainWindow::OnSignSaveRecordInfoFinished2UI(int code, int count)
     if(count > 0) {
         ui->uiRecordTreeView->reset();
     }
-    QString info = QString("è®°å½•åŒæ­¥å®Œæˆ %1").arg(QString::number(count));
+    QString info = QString("Record synchronization completion %1").arg(QString::number(count));
     ui->statusBar->showMessage(info, 10000);
 }
 
@@ -74,7 +74,7 @@ void MainWindow::OnSignImportDBDataFinished2UI(int code, int count)
     if(count > 0){
          ui->uiRecordTreeView->reset();
     }
-    QString info = QString("è®°å½•åˆå§‹å®Œæˆ %1").arg(QString::number(count));
+    QString info = QString("Record initial completion %1").arg(QString::number(count));
     ui->statusBar->showMessage(info, 10000);
 }
 
@@ -107,7 +107,7 @@ void MainWindow::OnSignGetDorDataVersionFinished2UI(int code, QString msg, const
 
         } else {
             QControlSo::instance().syncRecord();
-            ui->statusBar->showMessage(tr("ç½‘ç»œåŒæ­¥ä¸­..."), 10000);
+            ui->statusBar->showMessage(tr("Network synchronization..."), 10000);
         }
     }
 }
@@ -121,20 +121,20 @@ void MainWindow::OnSignCheckVersionFinished2UI(int code, QString msg, const QVar
     {
         VersionInfoStruct vis = mark.value<VersionInfoStruct>();
         if( vis.verNum > QString(VERSION_NUM).toInt()){
-            info = QString("æœ‰æ–°ç‰ˆæœ¬ %1 ç¡®å®šè¦ä¸‹è½½å—ï¼Ÿ").arg(vis.version);
-            QMessageBox message(QMessageBox::NoIcon, tr("å¤šå•¦Aæ¢¦"), info, QMessageBox::Yes | QMessageBox::No, NULL);
+            info = QString("new Version: %1 to Download?").arg(vis.version);
+            QMessageBox message(QMessageBox::NoIcon, tr("Doraemon"), info, QMessageBox::Yes | QMessageBox::No, NULL);
             if(message.exec() == QMessageBox::Yes)
             {
                 QDesktopServices::openUrl(QUrl(vis.downAddress));
             }
         } else {
-            info = QString("å·²æ˜¯æœ€æ–°ç‰ˆæœ¬ %1").arg(VERSION);
-            QMessageBox::information(this, tr("å¤šå•¦Aæ¢¦"), info);
+            info = QString("It's the latest version: %1").arg(VERSION);
+            QMessageBox::information(this, tr("Doraemon"), info);
         }
         return;
     }
-    info = QString("æ£€æµ‹å¤±è´¥: %1").arg(msg);
-    QMessageBox::information(this, tr("å¤šå•¦Aæ¢¦"), info);
+    info = QString("¼ì²âÊ§°Ü: %1").arg(msg);
+    QMessageBox::information(this, tr("Doraemon"), info);
 }
 
 
@@ -144,7 +144,7 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
     RecordStruct rs = QDatabaseSo::instance().getRecordRecord(recordId);
     QString filePath = QDatabaseSo::instance().getResourceServer() + rs.relativePath;
 //    qDebug() << filePath;
-    QString swfFile = qApp->applicationDirPath()+"/Resource/26ä¸ªè‹±æ–‡å­—æ¯å‘éŸ³ã€ç¬”ç”»/a.swf"; // "http://www.firemail.wang/production_resource/temp/a.swf";
+//    QString swfFile = qApp->applicationDirPath()+"/Resource/26¸öÓ¢ÎÄ×ÖÄ¸·¢Òô¡¢±Ê»­/a.swf"; // "http://www.firemail.wang/production_resource/temp/a.swf";
     ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
 
 }
@@ -168,8 +168,8 @@ void MainWindow::on_syncAction_triggered()
 void MainWindow::on_uiPushButtonRecordQuery_clicked()
 {
     m_rq.queryKey = ui->uiLineEditRecordKey->text();
-    if(m_cq.queryKey.isEmpty()){
-        QMessageBox::information(this, tr("è­¦å‘Š"), tr("æŸ¥è¯¢å…³é”®å­—ä¸èƒ½ä¸ºç©º"));
+    if(m_rq.queryKey.isEmpty()){
+        QMessageBox::information(this, tr("Notice"), tr("Query key can not be empty"));
         return;
     }
     m_pRecordTreeModel->setQuery(m_rq);
@@ -234,7 +234,7 @@ void MainWindow::on_uiPushButtonFullScreen_clicked()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    // å“åº”Escé”®ä»¥é€€å‡ºç¨‹åº
+    // ÏìÓ¦Esc¼üÒÔÍË³ö³ÌĞò
     if (event->key() == Qt::Key_Escape)
     {
        on_uiPushButtonFullScreen_clicked();
@@ -245,7 +245,7 @@ void MainWindow::changeEvent(QEvent * event)
 {
     if ((event->type() == QEvent::WindowStateChange) && isMinimized())
     {
-        //æœ€å°åŒ–è¿˜æ˜¯åŸæ¥çš„æ–¹å¼ï¼Œä¸è¿›è¡Œéšè—å¤„ç†äº†ã€‚
+        //×îĞ¡»¯»¹ÊÇÔ­À´µÄ·½Ê½£¬²»½øĞĞÒş²Ø´¦ÀíÁË¡£
 //       this->hide();
 //       event->ignore();
     }
@@ -267,18 +267,21 @@ void MainWindow::on_uiPushButtonQueryClass_clicked()
     if(!m_bQueryClass) {
          m_cq.queryKey = ui->uiLineEditClassKey->text();
          if(m_cq.queryKey.isEmpty()){
-             QMessageBox::information(this, tr("è­¦å‘Š"), tr("æŸ¥è¯¢å…³é”®å­—ä¸èƒ½ä¸ºç©º"));
+             QMessageBox::information(this, tr("Notice"), tr("Query key can not be empty"));
              return;
          }
-        ui->uiPushButtonQueryClass->setText(tr("é‡ç½®"));
+         ui->uiPushButtonQueryClass->setIcon(QIcon(":/doraemon/res/reset.png"));
+         ui->uiPushButtonQueryClass->setToolTip(tr("Reset"));
         ui->uiLeftStackedWidget->setCurrentIndex(1);
 
         m_pClassListModel->setQuery(m_cq);
         ui->uiClassListView->reset();
 
     } else {
-        ui->uiPushButtonQueryClass->setText(tr("æŸ¥è¯¢åˆ†ç±»"));
+        ui->uiPushButtonQueryClass->setIcon(QIcon(":/doraemon/res/search.png"));
+        ui->uiPushButtonQueryClass->setToolTip(tr("Query classification"));
         ui->uiLineEditClassKey->setText(tr(""));
+        m_cq.queryKey = "";
         ui->uiLeftStackedWidget->setCurrentIndex(0);
     }
     m_bQueryClass = !m_bQueryClass;
@@ -316,10 +319,10 @@ void MainWindow::on_activeTray(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::showMessage()
 {
-    m_systemTray->showMessage("å¤šå•¦Aæ¢¦",
-           "æ¬¢è¿ä½¿ç”¨!",
-            QSystemTrayIcon::Information,//æ¶ˆæ¯çª—å£å›¾æ ‡
-                              5000);//æ¶ˆæ¯çª—å£æ˜¾ç¤ºæ—¶é•¿
+    m_systemTray->showMessage("¶àÀ²AÃÎ",
+           "»¶Ó­Ê¹ÓÃ!",
+            QSystemTrayIcon::Information,//ÏûÏ¢´°¿ÚÍ¼±ê
+                              5000);//ÏûÏ¢´°¿ÚÏÔÊ¾Ê±³¤
 }
 
 void MainWindow::showWindow()
@@ -332,7 +335,7 @@ void MainWindow::showWindow()
     }
 #ifdef Q_OS_WIN32
 //    SetWindowPos((HWND)winId(),HWND_TOPMOST,pos().x(),pos().y(),width(),height(),SWP_SHOWWINDOW);
-    //è®¾ç½®çª—å£ç½®é¡¶
+    //ÉèÖÃ´°¿ÚÖÃ¶¥
     SetWindowPos(HWND(this->winId()), HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
     SetWindowPos(HWND(this->winId()), HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_SHOWWINDOW);
 
@@ -403,7 +406,7 @@ void MainWindow::modelViewHandel()
     m_pRecordTreeModel->setQuery(m_rq);
     ui->uiRecordTreeView->setModel(m_pRecordTreeModel);
     ui->uiRecordTreeView->setColumnWidth(0,400);
-    //éšè—æ ¹èŠ‚ç‚¹é¡¹å‰çš„å›¾æ ‡ï¼ˆå±•å¼€æŠ˜å å›¾æ ‡ï¼‰
+    //Òş²Ø¸ù½ÚµãÏîÇ°µÄÍ¼±ê£¨Õ¹¿ªÕÛµşÍ¼±ê£©
     ui->uiRecordTreeView->setRootIsDecorated(false);
 
     setQueryResultInfo();
@@ -413,20 +416,20 @@ void MainWindow::trayHandle()
 {
     m_systemTray = new QSystemTrayIcon(this);
     m_systemTray->setIcon(QIcon(":/doraemon/res/Doraemon.png"));
-    m_systemTray->setToolTip(tr("å“†å•¦Aæ¢¦"));
+    m_systemTray->setToolTip(tr("Doramon"));
     m_systemTray->show();
-    connect(m_systemTray, &QSystemTrayIcon::activated, this, &MainWindow::on_activeTray);//ç‚¹å‡»æ‰˜ç›˜ï¼Œæ‰§è¡Œç›¸åº”çš„åŠ¨ä½œ
+    connect(m_systemTray, &QSystemTrayIcon::activated, this, &MainWindow::on_activeTray);//µã»÷ÍĞÅÌ£¬Ö´ĞĞÏàÓ¦µÄ¶¯×÷
     m_menu = new QMenu(this);
     m_actionMain = new QAction(m_menu);
-    m_actionMain->setText(tr("æ‰“å¼€ä¸»çª—å£"));
+    m_actionMain->setText("open window");
     m_menu->addAction(m_actionMain);
     connect(m_actionMain, &QAction::triggered, this, &MainWindow::showWindow);
     m_actionExit = new QAction(m_menu);
-    m_actionExit->setText(tr("é€€å‡º"));
+    m_actionExit->setText("exit");
     m_menu->addAction(m_actionExit);
     connect(m_actionExit, &QAction::triggered, this, &MainWindow::exitWindow);
     m_systemTray->setContextMenu(m_menu);
-    connect(m_systemTray, &QSystemTrayIcon::messageClicked, this, &MainWindow::showWindow);//ç‚¹å‡»æ¶ˆæ¯æ¡†ï¼Œæ˜¾ç¤ºä¸»çª—
+    connect(m_systemTray, &QSystemTrayIcon::messageClicked, this, &MainWindow::showWindow);//µã»÷ÏûÏ¢¿ò£¬ÏÔÊ¾Ö÷´°
 }
 
 void MainWindow::configFileHandle()
@@ -445,7 +448,7 @@ void MainWindow::configFileHandle()
 
 void MainWindow::importDBData()
 {
-    ui->statusBar->showMessage(tr("æ•°æ®åŒæ­¥ä¸­..."), 10000);
+    ui->statusBar->showMessage(tr("Data synchronization..."), 10000);
     QControlSo::instance().importRecords();
 //    QDatabaseSo::instance().importRecords();
 //    QVector<QString> vecRecords;
@@ -479,11 +482,11 @@ void MainWindow::pushActiveInfo()
 void MainWindow::skinHandle()
 {
     ui->uiPushButtonFullScreen->setIcon(QIcon(":/doraemon/res/fullscreen.png"));
-    ui->uiPushButtonFullScreen->setToolTip(tr("åˆ‡æ¢åˆ°å…¨å±"));
+    ui->uiPushButtonFullScreen->setToolTip(tr("Switch to full screen"));
     ui->uiPushButtonQueryClass->setIcon(QIcon(":/doraemon/res/search.png"));
-    ui->uiPushButtonQueryClass->setToolTip(tr("æŸ¥è¯¢åˆ†ç±»"));
+    ui->uiPushButtonQueryClass->setToolTip(tr("Query classification"));
     ui->uiPushButtonRecordQuery->setIcon(QIcon(":/doraemon/res/search.png"));
-    ui->uiPushButtonRecordQuery->setToolTip(tr("æŸ¥è¯¢"));
+    ui->uiPushButtonRecordQuery->setToolTip(tr("Query"));
 }
 
 void MainWindow::on_verCheckAction_triggered()

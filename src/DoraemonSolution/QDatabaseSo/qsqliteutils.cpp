@@ -81,7 +81,7 @@ bool QSqliteUtils::Updata(const QString &qsSql)
 bool QSqliteUtils::del(QString &table, QString &expression)
 {
     QMutexLocker locker(&m_dbMutex);
-    //DELETE FROM 表名称 WHERE 列名称 = 值
+    //DELETE FROM tablename WHERE colname = value
     QString sql = QString("delete from ") + table + QString(" where ") + expression;
     QSqlQuery sqlQuery(m_db);
     if (sqlQuery.exec(sql))
