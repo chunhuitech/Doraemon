@@ -1,4 +1,10 @@
 
+
+
+window下MSVC2013_64bit-Release编译后事件 http://www.firemail.wang:8088/forum.php?mod=viewthread&tid=9308
+xcopy /r /y   %{sourceDir}\QLoggingLib\log4qt.conf %{buildDir}\Doraemon\%{CurrentBuild:Type}
+
+
 发布：
 Ctrl + R 打开运行，输入CMD，打开命令行
 输入如下命令
