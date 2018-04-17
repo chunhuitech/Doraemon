@@ -11,9 +11,6 @@
 #include "Tables/qdoraemonconfigtable.h"
 #include "Tables/qrecordtable.h"
 #include "dbdefine.h"
-/*
- * 对一个指定数据库的操作都放在这，故做为一个单例
- */
 
 class QDATABASESOSHARED_EXPORT QDatabaseSo : public QObject
 {
@@ -22,10 +19,9 @@ public:
     static QDatabaseSo &instance(void)
         {
     #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
-            if(!QAtomicPointer<QDatabaseSo>::isTestAndSetNative())//运行时进行检测
+            if(!QAtomicPointer<QDatabaseSo>::isTestAndSetNative())
                 qDebug() << "Error: don's support TestAndSetNative!!!!!!";
     #endif
-            //双重检测加锁
             if(m_pInstance.testAndSetOrdered(0,0)){
                 QMutexLocker locker(&m_Mutex);
                 m_pInstance.testAndSetOrdered(0, new QDatabaseSo);

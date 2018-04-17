@@ -20,16 +20,16 @@ public:
 
     // check dor ver
     void getDorDataVersion();
-    //down dor data文件
+    //down dor data file
     void downDorDataFile(QString downAddr);
     //push Active
     void pushActiveInfo(ProductActivityStruct pas);
-    //版本检测
+    //checkVersion
     void checkVersion(VersionInfoStruct vis);
-    /////分类数据处理/////
+    /////class data handle/////
     void syncClassification();
 
-    ////记录数据处理////
+    ////record data handle////
     void syncRecord();
     void importRecords();
 
@@ -38,10 +38,9 @@ public:
     static QControlSo &instance(void)
         {
     #ifdef Q_ATOMIC_POINTER_TEST_AND_SET_IS_ALWAYS_NATIVE
-            if(!QAtomicPointer<QControlSo>::isTestAndSetNative())//运行时进行检测
+            if(!QAtomicPointer<QControlSo>::isTestAndSetNative())
                 qDebug() << "Error: don's support TestAndSetNative!!!!!!";
     #endif
-            //双重检测加锁
             if(m_pInstance.testAndSetOrdered(0,0)){
                 QMutexLocker locker(&m_Mutex);
                 m_pInstance.testAndSetOrdered(0, new QControlSo);
@@ -70,7 +69,7 @@ signals:
     void signGetDorDataVersionFinished2UI(int code, QString msg, const QVariant& mark);
 
 private:
-//    由于网络请求本向就是异步的，所以这里就不需要再单独封装在线程中处理了，否则Cannot create children for a parent that is in a different thread
+//   not push to thread or "Cannot create children for a parent that is in a different thread"
 //    ClassificationNetOper classNetOper;
     ClassificatonAPI classAPI;
     RecordAPI recordAPI;

@@ -111,14 +111,14 @@ bool QDatabaseSo::importRecords(QVector<QString> &vecRecord)
 
 bool QDatabaseSo::importRecords()
 {
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));//中文转码声明
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("utf-8"));
     QString recordDorFileFullPath = QApplication::applicationDirPath() + "/data/comm_record.dor";
     QString recordFileFullPath = QApplication::applicationDirPath() + "/data/comm_record.txt";
     QCommLib::instance().Unzip(recordDorFileFullPath, recordFileFullPath);
     QFile file(recordFileFullPath);
     if(!file.open(QIODevice::ReadOnly))
          m_pLog->error("QDatabaseSo::importRecords OPEN FILE FAILED." + recordFileFullPath, LMV_DB);
-    QTextStream * out = new QTextStream(&file);//文本流
+    QTextStream * out = new QTextStream(&file);
     QString fileContent = out->readAll();
     file.close();
     QStringList tempOption = fileContent.split("\r\n");
