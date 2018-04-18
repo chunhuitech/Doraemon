@@ -31,5 +31,4 @@ xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Core.dll" "%sourceCodePath%\MSV
 xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Gui.dll" "%sourceCodePath%\MSVC2013_64bit-Release\" /d /c /f /y   >> %logFileName%
 xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Network.dll" "%sourceCodePath%\MSVC2013_64bit-Release\" /d /c /f /y   >> %logFileName%
 xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Sql.dll" "%sourceCodePath%\MSVC2013_64bit-Release\" /d /c /f /y   >> %logFileName%
-xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Svg.dll" "%sourceCodePath%\MSVC2013_64bit-Release\" /d /c /f /y   >> %logFileName%
 xcopy "%qtMSVC2013Path64%\5.5\msvc2013_64\bin\Qt5Widgets.dll" "%sourceCodePath%\MSVC2013_64bit-Release\" /d /c /f /y   >> %logFileName%
