@@ -1,13 +1,14 @@
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\Doraemon\release\Doraemon.exe" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y 
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\Doraemon\release\log4qt.conf" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y   
-xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\Doraemon\release\config.ini" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y   
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\Doraemon\release\data\comm_record.dor" "C:\github\Doraemon\src\MinGW_32bit-Release\data\" /d /c /f /y   
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\QControlSo\release\QControlSo.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y   
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\QDatabaseSo\release\QDatabaseSo.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y   
 xcopy "C:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MinGW_32bit-Release\QNetSo\release\QNetSo.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\" /d /c /f /y   
 
 xcopy "C:\github\Doraemon\src\DoraemonSolution\plugins\flash\NPSWF32_9.0.28.0.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\plugins\" /d /c /f /y   
+xcopy "C:\github\Doraemon\src\DoraemonSolution\configs\config_windows_32.ini" "C:\github\Doraemon\src\MinGW_32bit-Release\config.ini" /d /c /f /y   
 
+xcopy "C:\Qt\Qt5.5.1\mingw492\5.5\mingw492_32\plugins\platforms\qwindows.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\platforms\" /d /c /f /y 
 xcopy "C:\Qt\Qt5.5.1\mingw492\5.5\mingw492_32\plugins\sqldrivers\qsqlite.dll" "C:\github\Doraemon\src\MinGW_32bit-Release\sqldrivers\" /d /c /f /y 
 
 

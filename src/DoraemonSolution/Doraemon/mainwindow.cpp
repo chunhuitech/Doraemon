@@ -372,8 +372,8 @@ void MainWindow::widgetHideShow()
     ui->uiLeftRightSplitter->setStretchFactor(1,7);
     ui->uiLeftTBSplitter->setStretchFactor(0,1);
     ui->uiLeftTBSplitter->setStretchFactor(1,9);
-    ui->uiRightTBSplitter->setStretchFactor(0,7);
-    ui->uiRightTBSplitter->setStretchFactor(1,3);
+    ui->uiRightTBSplitter->setStretchFactor(0,5);
+    ui->uiRightTBSplitter->setStretchFactor(1,5);
 //    ui->uiLeftStackedWidget->setMargin(1);
 //    ui->uiLeftStackedWidget->setSpacing(1);
 //    ui->uiLeftStackedWidget->setContentsMargins(0,0,0,0);
@@ -390,11 +390,11 @@ void MainWindow::widgetHideShow()
         websetting->setAttribute(QWebSettings::JavascriptEnabled, true);
         websetting->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);//
         websetting->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
-        ui->uiWebViewPlay->load(QUrl(swfFile));
+        ui->uiWebViewPlay->load(QUrl("http://www.chunhuitech.cn:8088/doraemon/"));
         ui->uiWebViewPlay->show();
     }
 
-
+    ui->uiWebViewPlay->setContextMenuPolicy(Qt::NoContextMenu);
 
 }
 

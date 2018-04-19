@@ -172,7 +172,10 @@
         <number>3</number>
        </property>
        <widget class="QWidget" name="layoutWidget1">
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_rightTop">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QStackedWidget" name="uiStackedWidgetPlay">
            <property name="sizePolicy">
@@ -188,7 +191,7 @@
             <number>0</number>
            </property>
            <property name="currentIndex">
-            <number>1</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="page">
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -238,6 +241,12 @@
              </property>
              <item>
               <widget class="QWebView" name="uiWebViewPlay">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>130</height>
+                </size>
+               </property>
                <property name="url">
                 <url>
                  <string>about:blank</string>
@@ -247,6 +256,7 @@
              </item>
             </layout>
            </widget>
+           <widget class="QWidget" name="page_3"/>
           </widget>
          </item>
          <item>
@@ -300,7 +310,7 @@
         </layout>
        </widget>
        <widget class="QWidget" name="layoutWidget2">
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_rightBottom">
          <property name="spacing">
           <number>0</number>
          </property>
