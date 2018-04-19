@@ -12,6 +12,8 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
+#include <QWebView>
+#include <QWebSettings>
 namespace Ui {
 class MainWindow;
 }
@@ -91,7 +93,7 @@ private:
     QMenu * m_menu;
     QAction * m_actionMain;
     QAction * m_actionExit;
-    CommonData commonData;
+    CommonData m_commonData;
 };
 
 #endif // MAINWINDOW_H

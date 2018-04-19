@@ -3,3 +3,5 @@ build-DoraemonSolution-*
 *bit-Release
 *.zip
 *.log
+Doraemon_32bit*
+Doraemon_64bit*

@@ -21,13 +21,16 @@ const int GB = 1024 * 1024 * 1024;
 const int MB = 1024 * 1024;
 const int KB = 1024;
 //quint64
+#define FlashPlayWayFLAG "flashPlayWayFlag"
+#define OSPlatFlag "OsPlatFlag"
 #define DB_VERSION  "dbver"
 #define UI_MAX_RECORD_SHOW  "maxrecordshow"
 #define VERSION "1.0.0"
 #define VERSION_NUM "10000"
 #define APP_NAME "Doraemon"
 #define APP_ID "1"
-#define APP_PLAT_FORM "Qt"
+#define APP_PLAT_FORM_WIN_32 "Qt_Windows_32bit"
+#define APP_PLAT_FORM_WIN_64 "Qt_Windows_64bit"
 #define EVENT_START_UP    "start-up"
 enum RecordStatusValue
 {
@@ -50,10 +53,24 @@ enum ErrorCode
     EC_DB = 900002
 };
 
+enum FlashPlayWayFlag
+{
+    FPWF_AXWIDGET = 0,
+    FPWF_WEBVIEW = 1
+};
+
+enum OsPlatFlag
+{
+    OPF_WIN_32 = 0,
+    OPF_WIN_64 = 1
+};
+
 struct CommonData {
     QString iniFileName;
     int dbVersion;
     int maxRecordShow;
+    int flashPlayWayFLag;
+    int OsPlatFlag;
 };
 
 

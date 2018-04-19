@@ -199,7 +199,10 @@ bool QDatabaseSo::initDB(QLoggingLib* pLog)
 {
 //    QWriteLocker locker(&internalMutex);
     m_pLog = pLog;
-    m_sqlite.createDatabase(DORAEMON_DB_NAME);
+    m_sqlite.setLog(m_pLog);
+    if(!m_sqlite.createDatabase(DORAEMON_DB_NAME)){
+        return false;
+    }
     QString dbPath = QApplication::applicationDirPath() + "/data";
     QDir dir(dbPath);
     QString dbFullName;

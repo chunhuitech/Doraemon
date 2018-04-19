@@ -19,8 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowState(Qt::WindowMaximized);
     m_bFullScreen = false;
     m_bQueryClass = false;
-    widgetHideShow();
     configFileHandle();
+    widgetHideShow();    
     modelViewHandel();
     trayHandle();
     skinHandle();
@@ -94,9 +94,9 @@ void MainWindow::OnSignGetDorDataVersionFinished2UI(int code, QString msg, const
     if(mark.canConvert<DorDataFileStruct>())
     {
         DorDataFileStruct ddfs = mark.value<DorDataFileStruct>();
-        QSettings settings(commonData.iniFileName, QSettings::IniFormat);
-        commonData.dbVersion = settings.value(DB_VERSION, "0").toInt();
-        if(commonData.dbVersion < ddfs.versionNum){
+        QSettings settings(m_commonData.iniFileName, QSettings::IniFormat);
+        m_commonData.dbVersion = settings.value(DB_VERSION, "0").toInt();
+        if(m_commonData.dbVersion < ddfs.versionNum){
             QString recordFileFullPath = QApplication::applicationDirPath() + "/data/comm_record.dor";
             QFileInfo fi(recordFileFullPath);
             if(fi.exists()){
@@ -143,9 +143,14 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
     int recordId = reinterpret_cast<int>(index.internalPointer());
     RecordStruct rs = QDatabaseSo::instance().getRecordRecord(recordId);
     QString filePath = QDatabaseSo::instance().getResourceServer() + rs.relativePath;
+    if(m_commonData.flashPlayWayFLag == FPWF_AXWIDGET) {
+         ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
+    } else {
+        ui->uiWebViewPlay->load(QUrl(filePath));
+    }
 //    qDebug() << filePath;
 //    QString swfFile = qApp->applicationDirPath()+"/Resource/26¸öÓ¢ÎÄ×ÖÄ¸·¢Òô¡¢±Ê»­/a.swf"; // "http://www.firemail.wang/production_resource/temp/a.swf";
-    ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
+
 
 }
 
@@ -372,9 +377,25 @@ void MainWindow::widgetHideShow()
 //    ui->uiLeftStackedWidget->setMargin(1);
 //    ui->uiLeftStackedWidget->setSpacing(1);
 //    ui->uiLeftStackedWidget->setContentsMargins(0,0,0,0);
-    ui->flashAxWidget->setControl(QString::fromUtf8("{d27cdb6e-ae6d-11cf-96b8-444553540000}"));
     QString swfFile = "http://www.firemail.wang:8088/chunhui_resource/preschool/letters/a.swf";
-    ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
+    if(m_commonData.flashPlayWayFLag == FPWF_AXWIDGET) {
+        ui->uiStackedWidgetPlay->setCurrentIndex(0);
+        ui->flashAxWidget->setControl(QString::fromUtf8("{d27cdb6e-ae6d-11cf-96b8-444553540000}"));
+        ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
+    } else {
+        ui->uiStackedWidgetPlay->setCurrentIndex(1);
+        QWebSettings *websetting = QWebSettings::globalSettings();
+        websetting->setAttribute(QWebSettings::PluginsEnabled, true);
+//        websetting->setAttribute(QWebSettings::JavaEnabled, true);
+        websetting->setAttribute(QWebSettings::JavascriptEnabled, true);
+        websetting->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);//
+        websetting->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+        ui->uiWebViewPlay->load(QUrl(swfFile));
+        ui->uiWebViewPlay->show();
+    }
+
+
+
 }
 
 void MainWindow::modelViewHandel()
@@ -401,7 +422,7 @@ void MainWindow::modelViewHandel()
 
 
     m_pRecordTreeModel = new RecordTreeModel();
-    m_pRecordTreeModel->setMaxCount(commonData.maxRecordShow);
+    m_pRecordTreeModel->setMaxCount(m_commonData.maxRecordShow);
     m_rq.classId = 5;
     m_pRecordTreeModel->setQuery(m_rq);
     ui->uiRecordTreeView->setModel(m_pRecordTreeModel);
@@ -434,15 +455,24 @@ void MainWindow::trayHandle()
 
 void MainWindow::configFileHandle()
 {
-    commonData.iniFileName = QCoreApplication::applicationDirPath() + "/config.ini";
-    QSettings settings(commonData.iniFileName, QSettings::IniFormat);
-    commonData.dbVersion = settings.value(DB_VERSION, "0").toInt();
+    m_commonData.iniFileName = QCoreApplication::applicationDirPath() + "/config.ini";
+    QSettings settings(m_commonData.iniFileName, QSettings::IniFormat);
+    m_commonData.dbVersion = settings.value(DB_VERSION, "0").toInt();
     if(!settings.contains(DB_VERSION)){
         settings.setValue(DB_VERSION, "0");
     }
-    commonData.maxRecordShow = settings.value(UI_MAX_RECORD_SHOW, "100").toInt();
+    m_commonData.maxRecordShow = settings.value(UI_MAX_RECORD_SHOW, "100").toInt();
     if(!settings.contains(UI_MAX_RECORD_SHOW)){
         settings.setValue(UI_MAX_RECORD_SHOW, "100");
+    }
+    m_commonData.flashPlayWayFLag = settings.value(FlashPlayWayFLAG, "1").toInt();
+    if(!settings.contains(FlashPlayWayFLAG)){
+        settings.setValue(FlashPlayWayFLAG, "1");
+    }
+
+    m_commonData.OsPlatFlag = settings.value(OSPlatFlag, "0").toInt();
+    if(!settings.contains(OSPlatFlag)){
+        settings.setValue(OSPlatFlag, "0");
     }
 }
 
@@ -493,7 +523,12 @@ void MainWindow::on_verCheckAction_triggered()
 {
     VersionInfoStruct vis;
     vis.appName = APP_NAME;
-    vis.platform = APP_PLAT_FORM;
+    if(m_commonData.OsPlatFlag == OPF_WIN_32){
+        vis.platform = APP_PLAT_FORM_WIN_32;
+    } else {
+        vis.platform = APP_PLAT_FORM_WIN_64;
+    }
+
     QControlSo::instance().checkVersion(vis);
 }
 

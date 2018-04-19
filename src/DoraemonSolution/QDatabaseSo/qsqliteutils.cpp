@@ -2,6 +2,7 @@
 #include "qlogginglib.h"
 #include "dbdefine.h"
 #include <QSqlDriver>
+#include <QException>
 QSqliteUtils::QSqliteUtils()
 {
     m_errorInfoMap[QSqlError::NoError] = "No Error";
@@ -26,7 +27,7 @@ QString QSqliteUtils::getErrorInfo(int errorCode)
     }
     if (info.isEmpty())
     {
-        info = "QSqlError not find error type.";
+        info = QString("QSqliteUtils::getErrorInfo  not find error type:%1").arg(errorCode);
     }
     return info;
 }
@@ -34,7 +35,19 @@ QString QSqliteUtils::getErrorInfo(int errorCode)
 bool QSqliteUtils::createDatabase(const QString &connectionName)
 {
     QMutexLocker locker(&m_dbMutex);
-    m_db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    QString info;
+    try {
+        m_db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    } catch(QSqlError err){
+        info = QString("CSqliteUtils::createDatabase QSqlError error type:%1 error info:%2 connectionName:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(connectionName);
+        m_pLog->error(info, LMV_DB);
+        return false;
+    }
+    catch(QException err) {
+        info = QString("CSqliteUtils::createDatabase QException error what:%1 connectionName:%2").arg(err.what()).arg(connectionName);
+        m_pLog->error(info, LMV_DB);
+        return false;
+    }
     return true;
 }
 
@@ -47,18 +60,31 @@ void QSqliteUtils::removeDataBase(const QString &connectionName)
 bool QSqliteUtils::open(const QString &dbName)
 {
     QMutexLocker locker(&m_dbMutex);
-    QSqlError err;
-    m_db.setDatabaseName(dbName);
-    QString connection;
-    connection = m_db.connectionName();
-    bool bOpen = m_db.open();
+    bool bOpen =false;
+    QString info;
+    try {
+        m_db.setDatabaseName(dbName);
+        bOpen = m_db.open();
+    } catch(QSqlError err){
+        info = QString("CSqliteUtils::open QSqlError error type:%1 error info:%2 dbName:%3").arg(getErrorInfo(err.type())).arg(err.text()).arg(dbName);
+        m_pLog->error(info, LMV_DB);
+        return bOpen;
+    }
+    catch(QException err) {
+        info = QString("CSqliteUtils::open QException error what:%1 dbName:%2").arg(err.what()).arg(dbName);
+        m_pLog->error(info, LMV_DB);
+        return bOpen;
+    }
     if (!bOpen) {
+        QSqlError err;
         err = m_db.lastError();
         QString info = QString("QSqliteUtils::open error type:%1 error info:%2 ").arg(getErrorInfo(err.type())).arg(err.text());
         m_pLog->error(info, LMV_DB);
         return false;
     }
-    return true;
+    return bOpen;
+//    QString connection;
+//    connection = m_db.connectionName();
 }
 
 bool QSqliteUtils::Updata(const QString &qsSql)
