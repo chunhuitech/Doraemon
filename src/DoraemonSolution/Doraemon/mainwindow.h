@@ -13,6 +13,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QWebView>
+#include <Qprocess>
 #include <QWebSettings>
 namespace Ui {
 class MainWindow;
@@ -79,6 +80,9 @@ private slots:
     void on_uiLineEditRecordKey_returnPressed();
 
     void on_uiLineEditClassKey_returnPressed();
+    void processError(QProcess::ProcessError error);
+
+    void on_action_ImportRes_triggered();
 
 private:
     Ui::MainWindow *ui;
@@ -94,6 +98,7 @@ private:
     QAction * m_actionMain;
     QAction * m_actionExit;
     CommonData m_commonData;
+    QProcess m_process;
 };
 
 #endif // MAINWINDOW_H

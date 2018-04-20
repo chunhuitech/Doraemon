@@ -71,6 +71,7 @@ struct CommonData {
     int maxRecordShow;
     int flashPlayWayFLag;
     int OsPlatFlag;
+    bool hasFlashActiveX;
 };
 
 

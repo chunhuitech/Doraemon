@@ -7,10 +7,13 @@
 #include <QSystemTrayIcon>
 #include <QDesktopServices>
 #include <QFileInfo>
+#include <QProcess>
+
 #ifdef Q_OS_WIN32
 #include <windows.h>
 #endif
 
+#define FlashAXUUID "{d27cdb6e-ae6d-11cf-96b8-444553540000}"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -143,9 +146,30 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
     int recordId = reinterpret_cast<int>(index.internalPointer());
     RecordStruct rs = QDatabaseSo::instance().getRecordRecord(recordId);
     QString filePath = QDatabaseSo::instance().getResourceServer() + rs.relativePath;
+    QString localFilePath = QApplication::applicationDirPath() + rs.relativePath;
+    QFileInfo fi(localFilePath);
+    if(fi.exists()){
+       filePath = localFilePath;
+    }
     if(m_commonData.flashPlayWayFLag == FPWF_AXWIDGET) {
-         ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
+        ui->uiStackedWidgetPlay->setCurrentIndex(0);
+        if(!m_commonData.hasFlashActiveX){
+            QString info = QString("detects that there is no flash plug-in installed. Do you want to install it?");
+            QMessageBox message(QMessageBox::NoIcon, tr("Doraemon"), info, QMessageBox::Yes | QMessageBox::No, NULL);
+            if(message.exec() == QMessageBox::Yes)
+            {
+
+                 QString flashSetupPath = QApplication::applicationDirPath() + "/plugins/install_flash_player_ax.exe";
+                 qDebug() << flashSetupPath;
+                m_process.start(flashSetupPath, QStringList(flashSetupPath));//"C:/pluginsTest/install_flash_player_ax.exe"
+//                m_process.startDetached(flashSetupPath, QStringList(flashSetupPath));
+//                m_process.startDetached("cmd.exe");
+                return;
+            }
+        }
+        ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
     } else {
+        ui->uiStackedWidgetPlay->setCurrentIndex(1);
         ui->uiWebViewPlay->load(QUrl(filePath));
     }
 //    qDebug() << filePath;
@@ -377,24 +401,28 @@ void MainWindow::widgetHideShow()
 //    ui->uiLeftStackedWidget->setMargin(1);
 //    ui->uiLeftStackedWidget->setSpacing(1);
 //    ui->uiLeftStackedWidget->setContentsMargins(0,0,0,0);
-    QString swfFile = "http://www.firemail.wang:8088/chunhui_resource/preschool/letters/a.swf";
+//    QString swfFile = "http://www.firemail.wang:8088/chunhui_resource/preschool/letters/a.swf";
     if(m_commonData.flashPlayWayFLag == FPWF_AXWIDGET) {
-        ui->uiStackedWidgetPlay->setCurrentIndex(0);
-        ui->flashAxWidget->setControl(QString::fromUtf8("{d27cdb6e-ae6d-11cf-96b8-444553540000}"));
-        ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
-    } else {
-        ui->uiStackedWidgetPlay->setCurrentIndex(1);
-        QWebSettings *websetting = QWebSettings::globalSettings();
-        websetting->setAttribute(QWebSettings::PluginsEnabled, true);
-//        websetting->setAttribute(QWebSettings::JavaEnabled, true);
-        websetting->setAttribute(QWebSettings::JavascriptEnabled, true);
-        websetting->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);//
-        websetting->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
-        ui->uiWebViewPlay->load(QUrl("http://www.chunhuitech.cn:8088/doraemon/"));
-        ui->uiWebViewPlay->show();
+//        ui->uiStackedWidgetPlay->setCurrentIndex(FPWF_AXWIDGET);
+        if(ui->flashAxWidget->setControl(QString::fromUtf8(FlashAXUUID))){
+            m_commonData.hasFlashActiveX = true;
+        } else {
+            m_commonData.hasFlashActiveX = false;
+        }
+//        ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,swfFile);
     }
+    ui->uiStackedWidgetPlay->setCurrentIndex(1);
+    QWebSettings *websetting = QWebSettings::globalSettings();
+    websetting->setAttribute(QWebSettings::PluginsEnabled, true);
+//        websetting->setAttribute(QWebSettings::JavaEnabled, true);
+    websetting->setAttribute(QWebSettings::JavascriptEnabled, true);
+    websetting->setAttribute(QWebSettings::DeveloperExtrasEnabled, true);//
+    websetting->setAttribute(QWebSettings::JavascriptCanOpenWindows, true);
+    ui->uiWebViewPlay->load(QUrl("http://www.chunhuitech.cn:8088/doraemon/"));
+    ui->uiWebViewPlay->show();
 
     ui->uiWebViewPlay->setContextMenuPolicy(Qt::NoContextMenu);
+    ui->action_ImportRes->setVisible(false);
 
 }
 
@@ -419,6 +447,8 @@ void MainWindow::modelViewHandel()
             this, SLOT(OnSignDownDorFileFinished2UI(int, int)), Qt::QueuedConnection);
     QObject::connect(&QControlSo::instance(), SIGNAL(signGetDorDataVersionFinished2UI(int, QString, const QVariant&)),
             this, SLOT(OnSignGetDorDataVersionFinished2UI(int, QString, const QVariant&)), Qt::QueuedConnection);
+
+    QObject::connect(&m_process, SIGNAL(error(QProcess::ProcessError)), this, SLOT(processError(QProcess::ProcessError)));
 
 
     m_pRecordTreeModel = new RecordTreeModel();
@@ -540,4 +570,43 @@ void MainWindow::on_uiLineEditRecordKey_returnPressed()
 void MainWindow::on_uiLineEditClassKey_returnPressed()
 {
     on_uiPushButtonQueryClass_clicked();
+}
+
+void MainWindow::processError(QProcess::ProcessError error)
+{
+    QString info = ". Please install it manually..." + QApplication::applicationDirPath() + "/plugins/install_flash_player_ax.exe";
+    switch(error)
+       {
+       case QProcess::FailedToStart:
+           QMessageBox::information(0, "Tip", "FailedToStart" + info);
+           break;
+       case QProcess::Crashed:
+           QMessageBox::information(0, "Tip", "Crashed" + info);
+           break;
+       case QProcess::Timedout:
+           QMessageBox::information(0, "Tip", "Timedout" + info);
+           break;
+       case QProcess::WriteError:
+           QMessageBox::information(0, "Tip", "WriteError" + info);
+           break;
+       case QProcess::ReadError:
+           QMessageBox::information(0, "Tip", "ReadError" + info);
+           break;
+       case QProcess::UnknownError:
+           QMessageBox::information(0, "Tip", "UnknownError" + info);
+           break;
+       default:
+           QMessageBox::information(0, "Tip", "UnknownError" + info);
+           break;
+       }
+}
+
+void MainWindow::on_action_ImportRes_triggered()
+{
+    QString program = QApplication::applicationDirPath() + "/7z.exe";
+    qDebug() << program;
+    QStringList arguments;
+    arguments << "x" << "C:\github\Doraemon\src\DoraemonSolution\tools\7z\1.zip" << "-aoa" << "-o" + QApplication::applicationDirPath();
+    qDebug() << arguments;
+     m_process.start(program, arguments, QIODevice::ReadWrite);
 }

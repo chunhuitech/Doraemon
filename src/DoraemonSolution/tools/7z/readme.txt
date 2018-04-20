@@ -1,0 +1,1 @@
+7z.exe x C:\github\Doraemon\src\DoraemonSolution\tools\7z\1.zip -aoa -oC:\github\Doraemon\src\build-DoraemonSolution-Desktop_Qt_5_5_1_MSVC2013_64bit-Release\Doraemon\release

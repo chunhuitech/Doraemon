@@ -191,7 +191,7 @@
             <number>0</number>
            </property>
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page">
             <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -420,6 +420,8 @@
      <string>操作</string>
     </property>
     <addaction name="syncAction"/>
+    <addaction name="separator"/>
+    <addaction name="action_ImportRes"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -447,6 +449,11 @@
   <action name="verCheckAction">
    <property name="text">
     <string>版本信息</string>
+   </property>
+  </action>
+  <action name="action_ImportRes">
+   <property name="text">
+    <string>导入资源文件</string>
    </property>
   </action>
  </widget>
