@@ -97,9 +97,9 @@
          <number>0</number>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
-        <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="page_class">
          <layout class="QVBoxLayout" name="verticalLayout_3">
           <property name="spacing">
            <number>0</number>
@@ -428,6 +428,9 @@
      <string>帮助</string>
     </property>
     <addaction name="verCheckAction"/>
+    <addaction name="separator"/>
+    <addaction name="action_Home"/>
+    <addaction name="action_OnlineHelp"/>
    </widget>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
@@ -454,6 +457,16 @@
   <action name="action_ImportRes">
    <property name="text">
     <string>导入资源文件</string>
+   </property>
+  </action>
+  <action name="action_Home">
+   <property name="text">
+    <string>首页</string>
+   </property>
+  </action>
+  <action name="action_OnlineHelp">
+   <property name="text">
+    <string>在线帮助</string>
    </property>
   </action>
  </widget>

@@ -148,8 +148,10 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
     QString filePath = QDatabaseSo::instance().getResourceServer() + rs.relativePath;
     QString localFilePath = QApplication::applicationDirPath() + rs.relativePath;
     QFileInfo fi(localFilePath);
+    bool findFile= false;
     if(fi.exists()){
        filePath = localFilePath;
+       findFile= true;
     }
     if(m_commonData.flashPlayWayFLag == FPWF_AXWIDGET) {
         ui->uiStackedWidgetPlay->setCurrentIndex(0);
@@ -160,7 +162,7 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
             {
 
                  QString flashSetupPath = QApplication::applicationDirPath() + "/plugins/install_flash_player_ax.exe";
-                 qDebug() << flashSetupPath;
+//                 qDebug() << flashSetupPath;
                 m_process.start(flashSetupPath, QStringList(flashSetupPath));//"C:/pluginsTest/install_flash_player_ax.exe"
 //                m_process.startDetached(flashSetupPath, QStringList(flashSetupPath));
 //                m_process.startDetached("cmd.exe");
@@ -170,7 +172,13 @@ void MainWindow::on_uiRecordTreeView_doubleClicked(const QModelIndex &index)
         ui->flashAxWidget->dynamicCall("LoadMovie(long,string)",0,filePath);
     } else {
         ui->uiStackedWidgetPlay->setCurrentIndex(1);
-        ui->uiWebViewPlay->load(QUrl(filePath));
+        if(findFile){
+            ui->uiWebViewPlay->load(QUrl::fromLocalFile(filePath));
+        } else {
+            ui->uiWebViewPlay->load(QUrl(filePath));
+        }
+
+
     }
 //    qDebug() << filePath;
 //    QString swfFile = qApp->applicationDirPath()+"/Resource/26¸öÓ¢ÎÄ×ÖÄ¸·¢Òô¡¢±Ê»­/a.swf"; // "http://www.firemail.wang/production_resource/temp/a.swf";
@@ -574,7 +582,7 @@ void MainWindow::on_uiLineEditClassKey_returnPressed()
 
 void MainWindow::processError(QProcess::ProcessError error)
 {
-    QString info = ". Please install it manually..." + QApplication::applicationDirPath() + "/plugins/install_flash_player_ax.exe";
+    QString info = ". Please install it manually  install_flash_player_ax.exe";
     switch(error)
        {
        case QProcess::FailedToStart:
@@ -599,6 +607,8 @@ void MainWindow::processError(QProcess::ProcessError error)
            QMessageBox::information(0, "Tip", "UnknownError" + info);
            break;
        }
+    QString flashSetupPath = QApplication::applicationDirPath() + "/plugins/";
+    QDesktopServices::openUrl(QUrl("file:" + flashSetupPath, QUrl::TolerantMode));
 }
 
 void MainWindow::on_action_ImportRes_triggered()
@@ -609,4 +619,16 @@ void MainWindow::on_action_ImportRes_triggered()
     arguments << "x" << "C:\github\Doraemon\src\DoraemonSolution\tools\7z\1.zip" << "-aoa" << "-o" + QApplication::applicationDirPath();
     qDebug() << arguments;
      m_process.start(program, arguments, QIODevice::ReadWrite);
+}
+
+void MainWindow::on_action_Home_triggered()
+{
+    ui->uiStackedWidgetPlay->setCurrentIndex(1);
+    ui->uiWebViewPlay->load(QUrl("http://www.chunhuitech.cn:8088/doraemon/"));
+    ui->uiWebViewPlay->show();
+}
+
+void MainWindow::on_action_OnlineHelp_triggered()
+{
+    QDesktopServices::openUrl(QUrl("http://www.firemail.wang:8088/forum.php?mod=viewthread&tid=9423"));
 }

@@ -84,6 +84,10 @@ private slots:
 
     void on_action_ImportRes_triggered();
 
+    void on_action_Home_triggered();
+
+    void on_action_OnlineHelp_triggered();
+
 private:
     Ui::MainWindow *ui;
     RecordTreeModel * m_pRecordTreeModel;
