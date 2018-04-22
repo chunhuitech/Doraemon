@@ -356,8 +356,8 @@ void MainWindow::on_activeTray(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::showMessage()
 {
-    m_systemTray->showMessage("多啦A梦",
-           "欢迎使用!",
+    m_systemTray->showMessage("Doraemon",
+           "Welcome to use!",
             QSystemTrayIcon::Information,//消息窗口图标
                               5000);//消息窗口显示时长
 }
