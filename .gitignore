@@ -5,3 +5,5 @@ build-DoraemonSolution-*
 *.log
 Doraemon_32bit*
 Doraemon_64bit*
+*-cache
+*-SetupFiles
