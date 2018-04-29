@@ -180,6 +180,7 @@ struct RecordQuery
 //    QString label;
 //    QString contentPlain;
     QString queryKey;
+    int maxCountShow;
 };
 
 //Column Headers

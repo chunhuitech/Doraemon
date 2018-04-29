@@ -11,6 +11,7 @@ RecordTreeModel::RecordTreeModel()
 void RecordTreeModel::setQuery(RecordQuery rq)
 {
     m_rq = rq;
+    m_rq.maxCountShow = m_maxCountShow;
     m_pModelData->setQuery(m_rq);
 }
 
@@ -43,9 +44,9 @@ int RecordTreeModel::rowCount(const QModelIndex &parent) const
     int parentItem = NOT_FIND_RECORD_ID;
 
     int count = m_pModelData->childCount(parentItem);
-    if(count > m_maxCountShow){
-        return m_maxCountShow;
-    }
+//    if(count > m_maxCountShow){
+//        return m_maxCountShow;
+//    }
     return count;
 }
 
