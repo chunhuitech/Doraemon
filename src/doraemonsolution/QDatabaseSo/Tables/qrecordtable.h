@@ -27,6 +27,7 @@ public:
     int handleRecord(QList<RecordStruct> recordList);
     int getChildRowId(int parentId, int row, RecordQuery rq);
     int getChildCount(RecordQuery rq, int id);
+    int getRealCount(RecordQuery rq);
     RecordStruct getRecord(int recordId);
 private:
     QSqliteUtils * m_pSqlUtil;

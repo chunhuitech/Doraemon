@@ -33,7 +33,6 @@
     <ROW Directory="Doraemon_1_Dir" Directory_Parent="ProgramMenuFolder" DefaultDir="Doraemon"/>
     <ROW Directory="Doraemon_Dir" Directory_Parent="APPDIR" DefaultDir="DORAEM~1|Doraemon_32"/>
     <ROW Directory="ProgramMenuFolder" Directory_Parent="TARGETDIR" DefaultDir="PROGRA~1|ProgramMenuFolder" IsPseudoRoot="1"/>
-    <ROW Directory="StartupFolder" Directory_Parent="TARGETDIR" DefaultDir="STARTU~1|StartupFolder" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
     <ROW Directory="data_Dir" Directory_Parent="Doraemon_Dir" DefaultDir="data"/>
     <ROW Directory="platforms_Dir" Directory_Parent="Doraemon_Dir" DefaultDir="PLATFO~1|platforms"/>
@@ -217,7 +216,6 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="Doraemon" Directory_="Doraemon_1_Dir" Name="Doraemon" Component_="Doraemon.exe" Target="[#Doraemon.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="Doraemon_Dir"/>
-    <ROW Shortcut="Doraemon_1" Directory_="StartupFolder" Name="Doraemon" Component_="Doraemon.exe" Target="[#Doraemon.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="Doraemon_Dir"/>
     <ROW Shortcut="Doraemon_2" Directory_="DesktopFolder" Name="Doraemon" Component_="Doraemon.exe" Target="[#Doraemon.exe]" Hotkey="0" IconIndex="0" ShowCmd="1" WkDir="Doraemon_Dir"/>
     <ROW Shortcut="_" Directory_="Doraemon_1_Dir" Name="卸载" Component_="Qt5Widgets.dll" Target="[SystemFolder]msiexec.exe" Arguments="/x [ProductCode]" Hotkey="0" Icon_="SystemFoldermsiexec.exe" IconIndex="0" ShowCmd="1"/>
   </COMPONENT>

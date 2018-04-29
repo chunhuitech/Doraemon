@@ -137,6 +137,21 @@ int QRecordTable::getChildCount(RecordQuery rq, int id)
          query_str += " and (title like '%" + rq.queryKey + "%' or label like '%" + rq.queryKey + "%' or contentPlain like '%"  + rq.queryKey + "%')";
     }
 //    m_pLog->info(query_str, LMV_DB);
+    query_str += " Limit " + QString::number(rq.maxCountShow);
+    if(m_pSqlUtil)
+        return m_pSqlUtil->getCount(query_str);
+    return NOT_FIND_RECORD_ID;
+}
+
+int QRecordTable::getRealCount(RecordQuery rq)
+{
+    QString query_str = QString("select 1 from record where 1=1 ");
+    if(rq.classId != 1){
+        query_str += " and classId=" + QString::number(rq.classId);
+    }
+    if(!rq.queryKey.isEmpty() && !rq.queryKey.isNull()){
+         query_str += " and (title like '%" + rq.queryKey + "%' or label like '%" + rq.queryKey + "%' or contentPlain like '%"  + rq.queryKey + "%')";
+    }
     if(m_pSqlUtil)
         return m_pSqlUtil->getCount(query_str);
     return NOT_FIND_RECORD_ID;

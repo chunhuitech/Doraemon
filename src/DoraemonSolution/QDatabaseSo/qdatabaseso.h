@@ -49,6 +49,7 @@ public:
     //////////////record table/////////////
     int getRecordChildRowId(int parentId, int row, RecordQuery rq);
     int getRecordChildCount(RecordQuery rq, int id);
+    int getRealCount(RecordQuery rq);
     RecordStruct getRecordRecord(int recordId);
     bool saveRecordInfo(const SyncRetRecordStruct srrs);
     bool importRecords(QVector<QString> & vecRecord);

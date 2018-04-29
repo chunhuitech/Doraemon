@@ -31,8 +31,7 @@ QVariant DBTreeModelDataRecordImpl::data(int recordId)
 
 int DBTreeModelDataRecordImpl::childCount(int id)
 {
-    m_realCount = QDatabaseSo::instance().getRecordChildCount(m_rq, id);
-    return m_realCount;
+    return QDatabaseSo::instance().getRecordChildCount(m_rq, id);
 }
 
 int DBTreeModelDataRecordImpl::columnCount(int parentId)
@@ -43,6 +42,6 @@ int DBTreeModelDataRecordImpl::columnCount(int parentId)
 
 int DBTreeModelDataRecordImpl::realCount()
 {
-    return m_realCount;
+    return QDatabaseSo::instance().getRealCount(m_rq);
 }
 

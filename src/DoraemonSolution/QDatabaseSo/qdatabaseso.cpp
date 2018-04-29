@@ -50,6 +50,11 @@ int QDatabaseSo::getRecordChildCount(RecordQuery rq, int id)
     return m_tableRecord.getChildCount(rq, id);
 }
 
+int QDatabaseSo::getRealCount(RecordQuery rq)
+{
+    return m_tableRecord.getRealCount(rq);
+}
+
 
 TreeModelDataItemClassification QDatabaseSo::getClassificationRecord(int classId)
 {
