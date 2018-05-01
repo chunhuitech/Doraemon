@@ -1,11 +1,9 @@
 @echo off
-::读取配置路径信息
 
-for /f "eol=# tokens=1,2* delims==" %%i in (pubConfig.ini) do (if /i "%%i"=="sourceCodePath" set sourceCodePath=%%j
-if /i "%%i"=="qtMinGWPath32" set qtMinGWPath32=%%j
-)
+set sourceCodePath="D:\chunhuitech\github\Doraemon\src"
+set qtMinGWPath32="C:\Qt\Qt5.5.1\mingw492x86"
 
-set logFileName=%DATE:~0,4%%DATE:~5,2%%DATE:~8,2%%TIME:~0,2%MinGW_32bit.log
+set logFileName=%DATE:~0,4%%DATE:~5,2%%DATE:~8,2%MinGW_32bit.log
 
 
 @echo sourceCodePath：%sourceCodePath%
