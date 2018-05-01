@@ -30,6 +30,10 @@ echo ---------------------------plugins---------------------- >> %logFileName%
 xcopy "%qtMinGWPath32%\5.5\mingw492_32\plugins\platforms\qwindows.dll" "%sourceCodePath%\MinGW_32bit-Release\platforms\" /d /c /f /y   >> %logFileName%
 xcopy "%qtMinGWPath32%\5.5\mingw492_32\plugins\sqldrivers\qsqlite.dll" "%sourceCodePath%\MinGW_32bit-Release\sqldrivers\" /d /c /f /y   >> %logFileName%
 
+echo ---------------------------dependent---------------------- >> %logFileName%
+xcopy "%sourceCodePath%\DoraemonSolution\dependent\libeay32.dll" "%sourceCodePath%\MinGW_32bit-Release\" /d /c /f /y   
+xcopy "%sourceCodePath%\DoraemonSolution\dependent\ssleay32.dll" "%sourceCodePath%\MinGW_32bit-Release\" /d /c /f /y   
+
 echo ---------------------------Qt---------------------- >> %logFileName%
 xcopy "%qtMinGWPath32%\5.5\mingw492_32\bin\Qt5Core.dll" "%sourceCodePath%\MinGW_32bit-Release\" /d /c /f /y   >> %logFileName%
 xcopy "%qtMinGWPath32%\5.5\mingw492_32\bin\Qt5Gui.dll" "%sourceCodePath%\MinGW_32bit-Release\" /d /c /f /y   >> %logFileName%
