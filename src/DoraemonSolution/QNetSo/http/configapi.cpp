@@ -14,7 +14,7 @@ ConfigApi::~ConfigApi()
 
 void ConfigApi::getDorDataVersion()
 {
-    QString postUrl = "http://www.firemail.wang:8880/api/admin/api/config/recorddataver";
+    QString postUrl = "https://www.chunhuitech.cn/api/admin/api/config/recorddataver";
     QJsonObject json;
     json.insert("time", "0");
     QJsonDocument document;

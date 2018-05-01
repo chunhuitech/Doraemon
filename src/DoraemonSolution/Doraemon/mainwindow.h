@@ -88,6 +88,10 @@ private slots:
 
     void on_action_OnlineHelp_triggered();
 
+    void on_actionCheckNet_triggered();
+
+    void on_actionExit_triggered();
+
 private:
     Ui::MainWindow *ui;
     RecordTreeModel * m_pRecordTreeModel;

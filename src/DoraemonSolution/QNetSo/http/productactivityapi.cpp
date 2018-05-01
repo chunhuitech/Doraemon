@@ -14,7 +14,7 @@ ProductActivityAPI::~ProductActivityAPI()
 
 void ProductActivityAPI::pushActivityInfo(ProductActivityStruct pas)
 {
-    QString postUrl = "http://www.firemail.wang:8880/api/admin/api/prodactivity/report";
+    QString postUrl = "https://www.chunhuitech.cn/api/admin/api/prodactivity/report";
     QJsonObject json;
     json.insert("userId", QString::number(pas.userId));
     json.insert("clientFlag", pas.clientFlag);

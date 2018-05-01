@@ -29,6 +29,7 @@ public:
     void setLog(QLoggingLib* pLog);
     QString gethostMac();
     QString gethostIp();
+    bool IPLive(QString ip, int port);
     QString getOSInfo();
     IpInfoStruct GetNetIPInfo();
 private:

@@ -169,6 +169,8 @@ bool QDatabaseSo::importRecords()
     if(okImport){
         QSettings settings(QCoreApplication::applicationDirPath() + "/config.ini", QSettings::IniFormat);
         settings.setValue(DB_VERSION, dbVersion);
+        qlonglong maxRecTime = getMaxRecordsSyncTime();
+        m_tableConfig.updateRecordSyncTime(maxRecTime*1000);
         emit signImportDBDataFinished(EC_SUCCESS, vecRecord.size());
     } else {
         emit signImportDBDataFinished(EC_ERROR, vecRecord.size());
@@ -180,6 +182,11 @@ bool QDatabaseSo::importRecords()
      }
 
     return okImport;
+}
+
+qlonglong QDatabaseSo::getMaxRecordsSyncTime()
+{
+    return m_tableRecord.getMaxSyncTime();
 }
 
 

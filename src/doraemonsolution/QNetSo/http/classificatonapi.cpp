@@ -2,7 +2,7 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonDocument>
-const QString GET_Classfication = QString("http://www.firemail.wang:8880/api/admin/api/class/fetch");
+const QString GET_Classfication = QString("https://www.chunhuitech.cn/api/admin/api/class/fetch");
 
 ClassificatonAPI::ClassificatonAPI()
 {
@@ -19,7 +19,7 @@ ClassificatonAPI::~ClassificatonAPI()
 
 void ClassificatonAPI::syncData(qlonglong lastTime)
 {
-    QString postUrl = "http://www.firemail.wang:8880/api/admin/api/class/fetch";
+    QString postUrl = "https://www.chunhuitech.cn/api/admin/api/class/fetch";
     QJsonObject json;
     json.insert("syncTime", lastTime);
     QJsonDocument document;

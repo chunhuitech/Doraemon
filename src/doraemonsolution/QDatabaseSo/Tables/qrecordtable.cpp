@@ -200,6 +200,31 @@ RecordStruct QRecordTable::getRecord(int recordId)
     return rs;
 }
 
+qlonglong QRecordTable::getMaxSyncTime()
+{
+    qlonglong maxSyncTime = NOT_FIND_RECORD_ID;
+    QString query_str = QString("Select max(modifyTime) as modifyTime From record ");
+
+    QSqlQuery sqlQuery(m_pSqlUtil->m_db);
+    bool bSuccess = sqlQuery.exec(query_str);
+    if (bSuccess)
+    {
+        int modifyTimeIndex = sqlQuery.record().indexOf("modifyTime");
+        while (sqlQuery.next())
+        {
+            maxSyncTime = sqlQuery.value(modifyTimeIndex).toLongLong();
+            break;
+        }
+    }
+    else
+    {
+        QSqlError err = m_pSqlUtil->m_db.lastError();
+        QString info = QString("QRecordTable::getMaxSyncTime exec type:%1 error info:%2 sql:%3").arg(m_pSqlUtil->getErrorInfo(err.type())).arg(err.text()).arg(query_str);
+        m_pLog->error(info, LMV_DB);
+    }
+    return maxSyncTime;
+}
+
 int QRecordTable::getChildRowId(int parentId, int row, RecordQuery rq)
 {
     Q_UNUSED(parentId);

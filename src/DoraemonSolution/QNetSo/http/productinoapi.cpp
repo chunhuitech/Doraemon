@@ -15,7 +15,7 @@ ProductInoAPI::~ProductInoAPI()
 
 void ProductInoAPI::checkVersion(VersionInfoStruct vis)
 {
-    QString postUrl = "http://www.firemail.wang:8880/api/admin/api/prodinfo/versioncheck";
+    QString postUrl = "https://www.chunhuitech.cn/api/admin/api/prodinfo/versioncheck";
     QJsonObject json;
     json.insert("name", vis.appName);
     json.insert("technologyPlatform", vis.platform);

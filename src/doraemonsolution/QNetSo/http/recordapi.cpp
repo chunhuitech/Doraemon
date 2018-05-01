@@ -15,12 +15,14 @@ RecordAPI::~RecordAPI()
 
 void RecordAPI::syncData(qlonglong lastTime)
 {
-    QString postUrl = "http://www.firemail.wang:8880/api/admin/api/record/fetch";
+    QString postUrl = "https://www.chunhuitech.cn/api/admin/api/record/fetch";
     QJsonObject json;
     json.insert("syncTime", lastTime);
     QJsonDocument document;
     document.setObject(json);
     QByteArray dataArray = document.toJson(QJsonDocument::Compact);
+    QString info = QString("start record sync syncTime:%1").arg(QString::number(lastTime));
+    m_pLog->info(info, LMV_NET);
     post(postUrl, dataArray);
 }
 

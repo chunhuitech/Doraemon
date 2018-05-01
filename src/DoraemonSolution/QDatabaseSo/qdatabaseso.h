@@ -54,6 +54,7 @@ public:
     bool saveRecordInfo(const SyncRetRecordStruct srrs);
     bool importRecords(QVector<QString> & vecRecord);
     bool importRecords();
+    qlonglong getMaxRecordsSyncTime();
     /////doraemon_config table//////////
     qlonglong getClassSyncTimeConfig();
     qlonglong getRecordSyncTimeConfig();

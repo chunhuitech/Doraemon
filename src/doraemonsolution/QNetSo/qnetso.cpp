@@ -56,6 +56,15 @@ QString QNetSo::gethostIp()
      return strIpAddress;
 }
 
+bool QNetSo::IPLive(QString ip, int port)
+{
+    QTcpSocket tcpClient;
+    tcpClient.abort();
+    tcpClient.connectToHost(ip, port);
+    //100毫秒没有连接上则判断不在线
+    return tcpClient.waitForConnected(100);
+}
+
 QString QNetSo::getOSInfo()
 {
     QString osInfo;

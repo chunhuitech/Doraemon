@@ -422,6 +422,9 @@
     <addaction name="syncAction"/>
     <addaction name="separator"/>
     <addaction name="action_ImportRes"/>
+    <addaction name="actionCheckNet"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -467,6 +470,16 @@
   <action name="action_OnlineHelp">
    <property name="text">
     <string>在线帮助</string>
+   </property>
+  </action>
+  <action name="actionCheckNet">
+   <property name="text">
+    <string>检查网络</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>退出</string>
    </property>
   </action>
  </widget>

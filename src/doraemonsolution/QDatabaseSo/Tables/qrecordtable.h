@@ -29,6 +29,7 @@ public:
     int getChildCount(RecordQuery rq, int id);
     int getRealCount(RecordQuery rq);
     RecordStruct getRecord(int recordId);
+    qlonglong getMaxSyncTime();
 private:
     QSqliteUtils * m_pSqlUtil;
     QLoggingLib* m_pLog;

@@ -297,6 +297,11 @@ void MainWindow::setQueryResultInfo()
         resultInfo = QString("total:%1 ").arg(QString::number(m_pRecordTreeModel->rowCount()));
     }
     ui->uiLabelQueryResult->setText(resultInfo);
+    if(m_pRecordTreeModel->rowCount() <=0 && m_rq.classId == 4 && !m_rq.queryKey.isEmpty() && !m_rq.queryKey.isNull()){
+        ui->uiStackedWidgetPlay->setCurrentIndex(1);
+        QString findWord=QString("https://hanyu.baidu.com/s?wd=%1&from=zici").arg(m_rq.queryKey);
+        ui->uiWebViewPlay->load(QUrl(findWord));
+    }
 }
 
 void MainWindow::on_uiPushButtonQueryClass_clicked()
@@ -631,4 +636,18 @@ void MainWindow::on_action_Home_triggered()
 void MainWindow::on_action_OnlineHelp_triggered()
 {
     QDesktopServices::openUrl(QUrl("http://www.firemail.wang:8088/forum.php?mod=viewthread&tid=9423"));
+}
+
+void MainWindow::on_actionCheckNet_triggered()
+{
+    if(QNetSo::instance().IPLive("202.108.22.5", 80)){
+        ui->statusBar->showMessage(tr("Network ok"), 10000);
+    } else {
+        ui->statusBar->showMessage(tr("Network fail"), 10000);
+    }
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    exitWindow();
 }
